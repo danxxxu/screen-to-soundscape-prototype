@@ -2,7 +2,21 @@ const sceneEl = document.querySelector("a-scene");
 const y = 1.5;
 const dis = 5;
 
-createElement(0, -2, "tryC", "tryId", "nosound");
+// intro element 
+let x0 = 0;
+let z0 = 0 - dis;
+createElement(x0, z0, "intro", "intro", "intro");
+
+// circular elements; 5 equally spaced in 180 degree
+const num = 5
+const deg = Math.PI / num;
+for(let i = 1; i < num + 1; i ++){
+  let x = x0 - dis * Math.cos(deg*i);
+  let z = z0 - dis * Math.sin(deg*i);
+  let c = "circle";
+  let id = c+i;
+  
+}
 
 function createElement(x, z, c, id, s) {
   const sphereEl = document.createElement("a-sphere");
@@ -12,7 +26,7 @@ function createElement(x, z, c, id, s) {
   sphereEl.setAttribute("position", x + " " + y + " " + z);
   sphereEl.setAttribute("class", c);
   sphereEl.setAttribute("id", id);
-  sphereEl.setAttribute("sound", "src:" + s);
+  sphereEl.setAttribute("sound", "src:#" + s);
   
   sceneEl.appendChild(sphereEl);
 }
