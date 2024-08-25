@@ -9,13 +9,14 @@ createElement(x0, z0, "intro", "intro", "intro");
 
 // circular elements; 5 equally spaced in 180 degree
 const num = 5
-const deg = Math.PI / num;
+const deg = Math.PI / (num + 1);
 for(let i = 1; i < num + 1; i ++){
   let x = x0 - dis * Math.cos(deg*i);
   let z = z0 - dis * Math.sin(deg*i);
   let c = "circle";
   let id = c+i;
   
+  createElement(x, z, c, id, id);
 }
 
 function createElement(x, z, c, id, s) {
