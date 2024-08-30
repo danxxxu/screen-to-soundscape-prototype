@@ -8,7 +8,7 @@ let z0 = 0 - dis;
 createElement(x0, z0, "intro", "intro", "intro");
 
 // circular elements; 5 equally spaced in 180 degree
-const num = 5
+const num = 5;
 const deg = Math.PI / (num + 1);
 for(let i = 1; i < num + 1; i ++){
   let x = x0 - dis * Math.cos(deg*i);
