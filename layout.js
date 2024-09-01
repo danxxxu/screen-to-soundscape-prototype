@@ -1,24 +1,38 @@
-const data = require("./en_wiki_Galaxy_with_audio.json");
-console.log(data)
+function fetchJSONData() {
+  fetch("./en_wiki_Galaxy_with_audio.json")
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((data) => console.log(data))
+    .catch((error) => console.error("Unable to fetch data:", error));
+}
+fetchJSONData();
+
+const fakedata = {title: title, introduction: intro, H2:h2_1, H2: {H3:h3, {}}}
 
 const sceneEl = document.querySelector("a-scene");
 const y = 1.5;
-const dis = 5;
+const d1 = 8; // header 2
+const d2 = 5; // header2 to header3
+const dp = 2; // header to p
 
-// intro element 
+// intro element
 let x0 = 0;
-let z0 = 0 - dis;
+let z0 = 0 - d1;
 createElement(sceneEl, x0, z0, "intro", "intro", "intro");
 
 // circular elements; 5 equally spaced in 180 degree
 const num = 5;
 const deg = Math.PI / (num + 1);
-for(let i = 1; i < num + 1; i ++){
-  let x = x0 - dis * Math.cos(deg*i);
-  let z = z0 - dis * Math.sin(deg*i);
+for (let i = 1; i < num + 1; i++) {
+  let x = x0 - dis * Math.cos(deg * i);
+  let z = z0 - dis * Math.sin(deg * i);
   let c = "circle";
-  let id = c+i;
-  
+  let id = c + i;
+
   createElement(sceneEl, x, z, c, id, id);
 }
 
@@ -31,7 +45,7 @@ function createElement(ele, x, z, c, id, s) {
   sphereEl.setAttribute("class", c);
   sphereEl.setAttribute("id", id);
   sphereEl.setAttribute("sound", "src:#" + s);
-  
+
   ele.appendChild(sphereEl);
 }
 
