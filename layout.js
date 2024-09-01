@@ -1,15 +1,18 @@
-function fetchJSONData() {
-  fetch("./en_wiki_Galaxy_with_audio.json")
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-      }
-      return res.json();
-    })
-    .then((data) => console.log(data))
-    .catch((error) => console.error("Unable to fetch data:", error));
+async function fetchJSONData() {
+  const response = await fetch("./en_wiki_Galaxy_with_audio.json");
+  const json = await response.json();
+  return json;
+  // .then((res) => {
+  //   if (!res.ok) {
+  //     throw new Error(`HTTP error! Status: ${res.status}`);
+  //   }
+  //   return res.json();
+  // })
+  // .then((data) => console.log(data))
+  // .catch((error) => console.error("Unable to fetch data:", error));
 }
-fetchJSONData();
+const data = fetchJSONData();
+console.log(data);
 
 const sceneEl = document.querySelector("a-scene");
 const y = 1.5;
@@ -23,14 +26,11 @@ let z = 0;
 z = z - d1;
 const titleEl = createElement(sceneEl, x0, z, "title", "title", "title");
 
-// intro element 
+// intro element
 z = z - d1;
 const intro = createElement(titleEl, x0, z, "intro", "intro", "intro");
 
 // sections
-
-
-
 // circular elements; 5 equally spaced in 180 degree
 const num = 5;
 const deg = Math.PI / (num + 1);
