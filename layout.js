@@ -1,3 +1,6 @@
+const data = require("./en_wiki_Galaxy_with_audio.json");
+console.log(data)
+
 const sceneEl = document.querySelector("a-scene");
 const y = 1.5;
 const dis = 5;
