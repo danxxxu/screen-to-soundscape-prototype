@@ -19,36 +19,43 @@ const d2 = 5; // header2 to header3
 const dp = 2; // header to p
 let x0 = 0;
 let z = 0;
-let src
+let src;
 
 function drawLayout(data) {
   // console.log(data);
-  
+
   // title element
   z = z - d1;
-  const src = data.Title;
-  const titleEl = createElement(sceneEl, x0, z, "title", "title", src);
-  console.log(src);
+  src = data.Title;
+  const titleEl = createElement(sceneEl, x0, y, z, "title", "title", src);
 
   // intro element
   z = z - d1;
-  const intro = createElement(titleEl, x0, z, "intro", "intro", "intro");
+  src = data.Introduction;
+  const intro = createElement(titleEl, x0, 0, z, "intro", "intro", src);
 
   // sections
+  const sections = data.Sections;
   // circular elements; 5 equally spaced in 180 degree
-  const num = 5;
-  const deg = Math.PI / (num + 1);
-  for (let i = 1; i < num + 1; i++) {
-    let x = x0 - d1 * Math.cos(deg * i);
-    z = z - d1 * Math.sin(deg * i);
-    let c = "circle";
-    let id = c + i;
+  //   const num = 5;
+  //   const deg = Math.PI / (num + 1);
+  //   for (let i = 1; i < num + 1; i++) {
+  //     let x = x0 - d1 * Math.cos(deg * i);
+  //     z = z - d1 * Math.sin(deg * i);
+  //     let c = "circle";
+  //     let id = c + i;
 
-    createElement(sceneEl, x, z, c, id, id);
+  //     createElement(sceneEl, x, z, c, id, id);
+  //   }
+}
+
+function iterateSection(section) {
+  for (const key in section) {
+    console.log(section[key]);
   }
 }
 
-function createElement(ele, x, z, c, id, s) {
+function createElement(ele, x, y, z, c, id, s) {
   const sphereEl = document.createElement("a-sphere");
   sphereEl.setAttribute("color", "#EF2D5E");
   sphereEl.setAttribute("shader", "flat");
