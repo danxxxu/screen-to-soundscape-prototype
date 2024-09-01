@@ -36,7 +36,8 @@ function drawLayout(data) {
 
   // sections
   const sections = data.Sections;
-  iterateSection(sections)
+  z = z - d1;
+  iterateSection(x0, 0, z, d1, sections);
   // circular elements; 5 equally spaced in 180 degree
   //   const num = 5;
   //   const deg = Math.PI / (num + 1);
@@ -50,12 +51,18 @@ function drawLayout(data) {
   //   }
 }
 
-function iterateSection(section) {
-  size = Object.keys(myObj).length;
+function iterateSection(x, y, z, d, section) {
+  const num = Object.keys(section).length;
+  const deg = Math.PI / (num - 1);
+  let i = 0;
   for (const key in section) {
     console.log(section[key]);
+    const x1 = x - d * Math.cos(deg * i);
+    const z1 = z - d1 * Math.sin(deg * i);
+    
+
     if (section[key].Subsections) {
-      console.log("sub!")
+      console.log("sub!");
       iterateSection(section[key].Subsections);
     }
   }
