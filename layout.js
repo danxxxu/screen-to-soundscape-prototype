@@ -11,25 +11,32 @@ function fetchJSONData() {
 }
 fetchJSONData();
 
-const fakedata = {title: title, introduction: intro, H2:h2_1, H2: {H3:h3, {}}}
-
 const sceneEl = document.querySelector("a-scene");
 const y = 1.5;
 const d1 = 8; // header 2
 const d2 = 5; // header2 to header3
 const dp = 2; // header to p
-
-// intro element
 let x0 = 0;
-let z0 = 0 - d1;
-createElement(sceneEl, x0, z0, "intro", "intro", "intro");
+let z = 0;
+
+// title element
+z = z - d1;
+const titleEl = createElement(sceneEl, x0, z, "title", "title", "title");
+
+// intro element 
+z = z - d1;
+const intro = createElement(titleEl, x0, z, "intro", "intro", "intro");
+
+// sections
+
+
 
 // circular elements; 5 equally spaced in 180 degree
 const num = 5;
 const deg = Math.PI / (num + 1);
 for (let i = 1; i < num + 1; i++) {
-  let x = x0 - dis * Math.cos(deg * i);
-  let z = z0 - dis * Math.sin(deg * i);
+  let x = x0 - d1 * Math.cos(deg * i);
+  z = z - d1 * Math.sin(deg * i);
   let c = "circle";
   let id = c + i;
 
@@ -47,6 +54,7 @@ function createElement(ele, x, z, c, id, s) {
   sphereEl.setAttribute("sound", "src:#" + s);
 
   ele.appendChild(sphereEl);
+  return document.getElementById("#" + id);
 }
 
 function distance(x1, z1, x2, z2) {
