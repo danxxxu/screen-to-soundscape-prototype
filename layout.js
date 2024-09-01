@@ -1,18 +1,16 @@
-async function fetchJSONData() {
-  const response = await fetch("./en_wiki_Galaxy_with_audio.json");
-  const json = await response.json();
-  return json;
-  // .then((res) => {
-  //   if (!res.ok) {
-  //     throw new Error(`HTTP error! Status: ${res.status}`);
-  //   }
-  //   return res.json();
-  // })
-  // .then((data) => console.log(data))
-  // .catch((error) => console.error("Unable to fetch data:", error));
+function fetchJSONData() {
+  fetch("./en_wiki_Galaxy_with_audio.json")
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((data) => drawLayout(data))
+    .catch((error) => console.error("Unable to fetch data:", error));
 }
-const data = fetchJSONData();
-console.log(data);
+
+fetchJSONData();
 
 const sceneEl = document.querySelector("a-scene");
 const y = 1.5;
@@ -21,26 +19,33 @@ const d2 = 5; // header2 to header3
 const dp = 2; // header to p
 let x0 = 0;
 let z = 0;
+let src
 
-// title element
-z = z - d1;
-const titleEl = createElement(sceneEl, x0, z, "title", "title", "title");
+function drawLayout(data) {
+  // console.log(data);
+  
+  // title element
+  z = z - d1;
+  const src = data.Title;
+  const titleEl = createElement(sceneEl, x0, z, "title", "title", src);
+  console.log(src);
 
-// intro element
-z = z - d1;
-const intro = createElement(titleEl, x0, z, "intro", "intro", "intro");
+  // intro element
+  z = z - d1;
+  const intro = createElement(titleEl, x0, z, "intro", "intro", "intro");
 
-// sections
-// circular elements; 5 equally spaced in 180 degree
-const num = 5;
-const deg = Math.PI / (num + 1);
-for (let i = 1; i < num + 1; i++) {
-  let x = x0 - d1 * Math.cos(deg * i);
-  z = z - d1 * Math.sin(deg * i);
-  let c = "circle";
-  let id = c + i;
+  // sections
+  // circular elements; 5 equally spaced in 180 degree
+  const num = 5;
+  const deg = Math.PI / (num + 1);
+  for (let i = 1; i < num + 1; i++) {
+    let x = x0 - d1 * Math.cos(deg * i);
+    z = z - d1 * Math.sin(deg * i);
+    let c = "circle";
+    let id = c + i;
 
-  createElement(sceneEl, x, z, c, id, id);
+    createElement(sceneEl, x, z, c, id, id);
+  }
 }
 
 function createElement(ele, x, z, c, id, s) {
@@ -54,7 +59,7 @@ function createElement(ele, x, z, c, id, s) {
   sphereEl.setAttribute("sound", "src:#" + s);
 
   ele.appendChild(sphereEl);
-  return document.getElementById("#" + id);
+  return document.getElementById(id);
 }
 
 function distance(x1, z1, x2, z2) {
