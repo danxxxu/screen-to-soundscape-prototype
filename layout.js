@@ -36,6 +36,7 @@ function drawLayout(data) {
 
   // sections
   const sections = data.Sections;
+  iterateSection(sections)
   // circular elements; 5 equally spaced in 180 degree
   //   const num = 5;
   //   const deg = Math.PI / (num + 1);
@@ -50,8 +51,13 @@ function drawLayout(data) {
 }
 
 function iterateSection(section) {
+  size = Object.keys(myObj).length;
   for (const key in section) {
     console.log(section[key]);
+    if (section[key].Subsections) {
+      console.log("sub!")
+      iterateSection(section[key].Subsections);
+    }
   }
 }
 
