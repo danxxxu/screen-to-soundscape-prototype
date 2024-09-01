@@ -5,7 +5,7 @@ const dis = 5;
 // intro element 
 let x0 = 0;
 let z0 = 0 - dis;
-createElement(x0, z0, "intro", "intro", "intro");
+createElement(sceneEl, x0, z0, "intro", "intro", "intro");
 
 // circular elements; 5 equally spaced in 180 degree
 const num = 5;
@@ -16,10 +16,10 @@ for(let i = 1; i < num + 1; i ++){
   let c = "circle";
   let id = c+i;
   
-  createElement(x, z, c, id, id);
+  createElement(sceneEl, x, z, c, id, id);
 }
 
-function createElement(x, z, c, id, s) {
+function createElement(ele, x, z, c, id, s) {
   const sphereEl = document.createElement("a-sphere");
   sphereEl.setAttribute("color", "#EF2D5E");
   sphereEl.setAttribute("shader", "flat");
@@ -29,7 +29,7 @@ function createElement(x, z, c, id, s) {
   sphereEl.setAttribute("id", id);
   sphereEl.setAttribute("sound", "src:#" + s);
   
-  sceneEl.appendChild(sphereEl);
+  ele.appendChild(sphereEl);
 }
 
 function distance(x1, z1, x2, z2) {
