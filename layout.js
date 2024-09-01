@@ -38,17 +38,6 @@ function drawLayout(data) {
   const sections = data.Sections;
   z = z - d1;
   iterateSection(x0, 0, z, d1, sections, intro);
-  // circular elements; 5 equally spaced in 180 degree
-  //   const num = 5;
-  //   const deg = Math.PI / (num + 1);
-  //   for (let i = 1; i < num + 1; i++) {
-  //     let x = x0 - d1 * Math.cos(deg * i);
-  //     z = z - d1 * Math.sin(deg * i);
-  //     let c = "circle";
-  //     let id = c + i;
-
-  //     createElement(sceneEl, x, z, c, id, id);
-  //   }
 }
 
 function iterateSection(x, y, z, d, section, ele) {
@@ -56,16 +45,17 @@ function iterateSection(x, y, z, d, section, ele) {
   const deg = Math.PI / (num - 1);
   let i = 0;
   for (const key in section) {
-    console.log(section[key]);
+    // console.log(section[key]);
     const x1 = x - d * Math.cos(deg * i);
     const z1 = z - d1 * Math.sin(deg * i);
-    const id = 
+    const id = key + i;
     const src = section[key].P_audio;
     const el = createElement(ele, x1, y, z1, key, id, src);
+    i ++;
 
     if (section[key].Subsections) {
       console.log("sub!");
-      iterateSection(section[key].Subsections);
+      iterateSection(x1, y, z1, d2, section[key].Subsections, el);
     }
   }
 }
