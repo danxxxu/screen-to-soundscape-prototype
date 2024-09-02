@@ -46,16 +46,18 @@ function iterateSection(x, y, z, d, section, ele) {
   let i = 0;
   for (const key in section) {
     // console.log(section[key]);
+    const name = key.replace(": ", "_")
     const x1 = x - d * Math.cos(deg * i);
     const z1 = z - d1 * Math.sin(deg * i);
     const id = key + i;
-    const src = section[key].P_audio;
+    const src = section[key].P_audio.replace("mp3s\\", "Sections_");
     const el = createElement(ele, x1, y, z1, key, id, src);
-    i ++;
+    i++;
 
     if (section[key].Subsections) {
-      console.log("sub!");
-      iterateSection(x1, y, z1, d2, section[key].Subsections, el);
+      // console.log("sub!");
+      const src = section[key].Subsections.replace("mp3s\\", "_Subsections_");
+      iterateSection(x1, y, z1, d2, src, el);
     }
   }
 }
