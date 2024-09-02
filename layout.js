@@ -62,8 +62,8 @@ function iterateSection(x, y, z, d, section, ele, prename) {
 
     if (section[key].Subsections) {
       // console.log("sub!");
-      prename = prename + ""
-      iterateSection(x1, y, z1, d2, section[key].Subsections, el, true);
+      prename = prename + "_Subsections_"
+      iterateSection(x1, y, z1, d2, section[key].Subsections, el, prename);
     }
   }
 }
