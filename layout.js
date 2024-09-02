@@ -46,28 +46,31 @@ function iterateSection(x, y, z, d, section, ele, prename) {
   let i = 0;
   for (const key in section) {
     // console.log(section[key]);
-    prename = prename + key.replace(": ", "_")
-    const header = prename + "_header";
+    //     header only
+    prename = prename + key.replace(":", "").replace(" ", "_");
+    const header = prename + "_header.mp3";
     const x1 = x - d * Math.cos(deg * i);
     const z1 = z - d1 * Math.sin(deg * i);
     const id = key + i;
-    // const src = section[key].P_audio.replace("mp3s\\", "Sections_");
-    const el = createElement(ele, x1, y, z1, key, id, header);
+    const classH = "header";
+    const el = createElement(ele, x1, y, z1, classH, id, header);
     i++;
-    
+
     if (section[key].P != "") {
       //       load p
-      const pname = prename + "_P";
+      const idP = id + "_p";
+      const classP = "p";
+      const nameP = prename + "_P.mp3";
+      createElement(el, x1, y, z1, classP, idP, nameP);
     }
 
     if (section[key].Subsections) {
       // console.log("sub!");
-      prename = prename + "_Subsections_"
+      prename = prename + "_Subsections_";
       iterateSection(x1, y, z1, d2, section[key].Subsections, el, prename);
     }
   }
 }
-
 
 function createElement(ele, x, y, z, c, id, s) {
   const sphereEl = document.createElement("a-sphere");
