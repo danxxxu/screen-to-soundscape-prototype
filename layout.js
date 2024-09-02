@@ -40,27 +40,31 @@ function drawLayout(data) {
   iterateSection(x0, 0, z, d1, sections, intro);
 }
 
-function iterateSection(x, y, z, d, section, ele) {
+function iterateSection(x, y, z, d, section, ele, sub) {
   const num = Object.keys(section).length;
   const deg = Math.PI / (num - 1);
   let i = 0;
   for (const key in section) {
     // console.log(section[key]);
-    const name = key.replace(": ", "_")
+    const header = key.replace(": ", "_") + "_header";
     const x1 = x - d * Math.cos(deg * i);
     const z1 = z - d1 * Math.sin(deg * i);
     const id = key + i;
-    const src = section[key].P_audio.replace("mp3s\\", "Sections_");
-    const el = createElement(ele, x1, y, z1, key, id, src);
+    // const src = section[key].P_audio.replace("mp3s\\", "Sections_");
+    const el = createElement(ele, x1, y, z1, key, id, header);
     i++;
+
+    if (section[key].P != "") {
+      //       load p
+    }
 
     if (section[key].Subsections) {
       // console.log("sub!");
-      const src = section[key].Subsections.replace("mp3s\\", "_Subsections_");
-      iterateSection(x1, y, z1, d2, src, el);
+      iterateSection(x1, y, z1, d2, section[key].Subsections, el, true);
     }
   }
 }
+
 
 function createElement(ele, x, y, z, c, id, s) {
   const sphereEl = document.createElement("a-sphere");
