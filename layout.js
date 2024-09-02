@@ -37,29 +37,32 @@ function drawLayout(data) {
   // sections
   const sections = data.Sections;
   z = z - d1;
-  iterateSection(x0, 0, z, d1, sections, intro);
+  iterateSection(x0, 0, z, d1, sections, intro, "Sections_");
 }
 
-function iterateSection(x, y, z, d, section, ele, sub) {
+function iterateSection(x, y, z, d, section, ele, prename) {
   const num = Object.keys(section).length;
   const deg = Math.PI / (num - 1);
   let i = 0;
   for (const key in section) {
     // console.log(section[key]);
-    const header = key.replace(": ", "_") + "_header";
+    prename = prename + key.replace(": ", "_")
+    const header = prename + "_header";
     const x1 = x - d * Math.cos(deg * i);
     const z1 = z - d1 * Math.sin(deg * i);
     const id = key + i;
     // const src = section[key].P_audio.replace("mp3s\\", "Sections_");
     const el = createElement(ele, x1, y, z1, key, id, header);
     i++;
-
+    
     if (section[key].P != "") {
       //       load p
+      const pname = prename + "_P";
     }
 
     if (section[key].Subsections) {
       // console.log("sub!");
+      prename = prename + ""
       iterateSection(x1, y, z1, d2, section[key].Subsections, el, true);
     }
   }
