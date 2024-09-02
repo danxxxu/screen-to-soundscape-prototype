@@ -47,7 +47,7 @@ function iterateSection(x, y, z, d, section, ele, prename) {
   for (const key in section) {
     // console.log(section[key]);
     //     header only
-    prename = prename + key.replace(":", "").replace(" ", "_");
+    prename = prename + key.replace(":", "").replaceAll(" ", "_");
     const header = prename + "_header.mp3";
     const x1 = x - d * Math.cos(deg * i);
     const z1 = z - d1 * Math.sin(deg * i);
