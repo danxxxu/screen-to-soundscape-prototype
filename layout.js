@@ -14,9 +14,9 @@ fetchJSONData();
 
 const sceneEl = document.querySelector("a-scene");
 const y = 1.5;
-const d1 = 5; // header 2
+const d1 = 8; // header 2
 const d2 = 3; // header2 to header3
-const dp = 1; // header to p
+const dp = 2; // header to p
 let x0 = 0;
 let z = 0;
 let src;
@@ -25,7 +25,7 @@ function drawLayout(data) {
   // console.log(data);
 
   // title element; pink
-  z = z - d1;
+  z = 0 - d1;
   src = data.Title.replace("mp3s\\", "");
   const titleEl = createElement(
     sceneEl,
@@ -39,7 +39,6 @@ function drawLayout(data) {
   );
 
   // intro element; pink
-  z = z - d1;
   src = data.Introduction.replace("mp3s\\", "");
   const intro = createElement(
     titleEl,
@@ -54,7 +53,6 @@ function drawLayout(data) {
 
   // sections
   const sections = data.Sections;
-  z = z - d1 / 2;
   iterateSection(x0, 0, z, d1, sections, intro, "Sections_");
 }
 
@@ -67,8 +65,8 @@ function iterateSection(x, y, z, d, section, ele, prename) {
     //     header only; blue color
     const name = prename + key.replace(":", "").replaceAll(" ", "_");
     const header = name + "_header.mp3";
-    const x1 = x - d * Math.cos(deg * i);
-    const z1 = z - d * Math.sin(deg * i);
+    const x1 = 0 - d * Math.cos(deg * i);
+    const z1 = 0 - d * Math.sin(deg * i);
     const id = key + i;
     const classH = "header";
     const el = createElement(ele, x1, y, z1, "#00FFFF", classH, id, header);
@@ -79,7 +77,7 @@ function iterateSection(x, y, z, d, section, ele, prename) {
       const idP = id + "_p";
       const classP = "p";
       const nameP = name + "_P.mp3";
-      createElement(el, x1, y, z1 - dp, "#FFFF00", classP, idP, nameP);
+      createElement(el, 0, y, 0 - dp, "#FFFF00", classP, idP, nameP);
     }
 
     if (section[key].Subsections) {
