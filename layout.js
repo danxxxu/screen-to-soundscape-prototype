@@ -53,10 +53,10 @@ function drawLayout(data) {
 
   // sections
   const sections = data.Sections;
-  iterateSection(x0, 0, z, d1, sections, intro, "Sections_");
+  iterateSection(x0, 0, z, d1, sections, intro, "Sections_", 0);
 }
 
-function iterateSection(x, y, z, d, section, ele, prename) {
+function iterateSection(x, y, z, d, section, ele, prename, angle) {
   const num = Object.keys(section).length;
   const deg = Math.PI / (num - 1);
   let i = 0;
@@ -65,33 +65,36 @@ function iterateSection(x, y, z, d, section, ele, prename) {
     //     header only; blue color
     const name = prename + key.replace(":", "").replaceAll(" ", "_");
     const header = name + "_header.mp3";
-    const x1 = 0 - d * Math.cos(deg * i);
-    const z1 = 0 - d * Math.sin(deg * i);
+    const x1 = 0 - d * Math.cos(deg * i + angle);
+    const z1 = 0 - d * Math.sin(deg * i + angle);
     const id = key + i;
     const classH = "header";
     const el = createElement(ele, x1, y, z1, "#00FFFF", classH, id, header);
-    i++;
 
     if (section[key].P != "") {
       //       load p; yellow color
       const idP = id + "_p";
       const classP = "p";
       const nameP = name + "_P.mp3";
-      createElement(el, 0, y, 0 - dp, "#FFFF00", classP, idP, nameP);
+      const xp = 0 - dp * Math.cos(deg * i + angle);
+      const zp = 0 - dp * Math.sin(deg * i + angle);
+      createElement(el, xp, y, zp, "#FFFF00", classP, idP, nameP);
     }
 
-    if (section[key].Subsections) {
-      // console.log(key);
-      iterateSection(
-        x1,
-        y,
-        z1,
-        d2,
-        section[key].Subsections,
-        el,
-        name + "_Subsections_"
-      );
-    }
+//     if (section[key].Subsections) {
+//       // console.log(key);
+//       iterateSection(
+//         x1,
+//         y,
+//         z1,
+//         d2,
+//         section[key].Subsections,
+//         el,
+//         name + "_Subsections_",
+//         deg * i
+//       );
+//     }
+        i++;
   }
 }
 
