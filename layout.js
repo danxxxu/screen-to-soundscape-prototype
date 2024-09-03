@@ -59,6 +59,7 @@ function createAudio(name) {
   audioEl.setAttribute("id", name);
   audioEl.setAttribute("preload", "auto");
   audioEl.setAttribute("src", url);
+  console.log(url);
   assetEl.appendChild(audioEl);
 }
 
@@ -147,9 +148,9 @@ function createElement(ele, x, y, z, col, c, id, s) {
   sphereEl.setAttribute("position", x + " " + y + " " + z);
   sphereEl.setAttribute("class", c);
   sphereEl.setAttribute("id", id);
-  sphereEl.setAttribute("sound", "src:#" + s);
-  console.log(x);
-  console.log(z);
+  sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true");
+  // console.log(x);
+  // console.log(z);
 
   ele.appendChild(sphereEl);
   return document.getElementById(id);
