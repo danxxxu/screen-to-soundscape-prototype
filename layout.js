@@ -15,8 +15,8 @@ fetchJSONData();
 const sceneEl = document.querySelector("a-scene");
 const y = 1.5;
 const d1 = 8; // header 2
-const d2 = 3; // header2 to header3
-const dp = 2; // header to p
+const d2 = 2; // header2 to header3
+const dp = 1; // header to p
 let x0 = 0;
 let z = 0;
 let src;
@@ -66,7 +66,7 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
     const name = prename + key.replace(":", "").replaceAll(" ", "_");
     const header = name + "_header.mp3";
     const x1 = 0 - d * Math.cos(deg * i + angle);
-    const z1 = 0 - d * Math.sin(deg * i + angle);
+    const z1 = 0 - d / 2 - d * Math.sin(deg * i + angle);
     const id = key + i;
     const classH = "header";
     const el = createElement(ele, x1, y, z1, "#00FFFF", classH, id, header);
@@ -81,20 +81,20 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
       createElement(el, xp, y, zp, "#FFFF00", classP, idP, nameP);
     }
 
-//     if (section[key].Subsections) {
-//       // console.log(key);
-//       iterateSection(
-//         x1,
-//         y,
-//         z1,
-//         d2,
-//         section[key].Subsections,
-//         el,
-//         name + "_Subsections_",
-//         deg * i
-//       );
-//     }
-        i++;
+    if (section[key].Subsections) {
+      // console.log(key);
+      iterateSection(
+        x1,
+        y,
+        z1,
+        d2,
+        section[key].Subsections,
+        el,
+        name + "_Subsections_",
+        deg * i - 0.5 * Math.PI
+      );
+    }
+    i++;
   }
 }
 
