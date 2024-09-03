@@ -26,7 +26,7 @@ function drawLayout(data) {
 
   // title element; pink
   z = z - d1;
-  src = data.Title;
+  src = data.Title.replace("mp3s\\", "");
   const titleEl = createElement(
     sceneEl,
     x0,
@@ -40,7 +40,7 @@ function drawLayout(data) {
 
   // intro element; pink
   z = z - d1;
-  src = data.Introduction;
+  src = data.Introduction.replace("mp3s\\", "");
   const intro = createElement(
     titleEl,
     x0,
@@ -72,6 +72,7 @@ function iterateSection(x, y, z, d, section, ele, prename) {
     const id = key + i;
     const classH = "header";
     const el = createElement(ele, x1, y, z1, "#00FFFF", classH, id, header);
+    console.log(z1)
     i++;
 
     if (section[key].P != "") {
@@ -79,11 +80,11 @@ function iterateSection(x, y, z, d, section, ele, prename) {
       const idP = id + "_p";
       const classP = "p";
       const nameP = name + "_P.mp3";
-      createElement(el, x1, y, z1 - dp, "#FFFF00", classP, idP, nameP);
+      createElement(el, x1, y, z1 - 1, "#FFFF00", classP, idP, nameP);
     }
 
     if (section[key].Subsections) {
-      // console.log("sub!");
+      // console.log(key);
       iterateSection(
         x1,
         y,
