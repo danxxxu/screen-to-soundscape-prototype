@@ -23,12 +23,30 @@ let x0 = 0;
 let z = 0;
 let src;
 
-
 function loadAudio(data) {
   createAudio(data.Title.replace("mp3s\\", ""));
   createAudio(data.Introduction.replace("mp3s\\", ""));
-  
+
+  iterateAudio(data.Sections, "Sections_");
+
   drawLayout(data);
+}
+
+function iterateAudio(section, prename) {
+  for (const key in section) {
+    const name = prename + key.replace(":", "").replaceAll(" ", "_");
+    const header = name + "_header.mp3";
+    createAudio(header);
+
+    if (section[key].P != "") {
+      const nameP = name + "_P.mp3";
+      createAudio(nameP);
+    }
+
+    if (section[key].Subsections) {
+      iterateAudio(section[key].Subsections, name + "_Subsections_");
+    }
+  }
 }
 
 function createAudio(name) {
@@ -75,8 +93,7 @@ function drawLayout(data) {
   );
 
   // sections
-  const sections = data.Sections;
-  iterateSection(x0, 0, z, d1, sections, intro, "Sections_", 0);
+  iterateSection(x0, 0, z, d1, data.Sections, intro, "Sections_", 0);
 }
 
 function iterateSection(x, y, z, d, section, ele, prename, angle) {
