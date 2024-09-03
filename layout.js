@@ -36,7 +36,7 @@ function drawLayout(data) {
 
   // sections
   const sections = data.Sections;
-  z = z - d1;
+  z = z - d1/2;
   iterateSection(x0, 0, z, d1, sections, intro, "Sections_");
 }
 
@@ -47,8 +47,8 @@ function iterateSection(x, y, z, d, section, ele, prename) {
   for (const key in section) {
     // console.log(section[key]);
     //     header only
-    prename = prename + key.replace(":", "").replaceAll(" ", "_");
-    const header = prename + "_header.mp3";
+    const name = prename + key.replace(":", "").replaceAll(" ", "_");
+    const header = name + "_header.mp3";
     const x1 = x - d * Math.cos(deg * i);
     const z1 = z - d1 * Math.sin(deg * i);
     const id = key + i;
@@ -60,14 +60,13 @@ function iterateSection(x, y, z, d, section, ele, prename) {
       //       load p
       const idP = id + "_p";
       const classP = "p";
-      const nameP = prename + "_P.mp3";
+      const nameP = name + "_P.mp3";
       createElement(el, x1, y, z1, classP, idP, nameP);
     }
 
     if (section[key].Subsections) {
       // console.log("sub!");
-      prename = prename + "_Subsections_";
-      iterateSection(x1, y, z1, d2, section[key].Subsections, el, prename);
+      iterateSection(x1, y, z1, d2, section[key].Subsections, el, name + "_Subsections_");
     }
   }
 }
