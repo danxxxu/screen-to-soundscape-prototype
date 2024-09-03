@@ -6,7 +6,8 @@ function fetchJSONData() {
       }
       return res.json();
     })
-    .then((data) => drawLayout(data))
+    .then((data) => createAudio(data))
+    // .then((data) => drawLayout(data))
     .catch((error) => console.error("Unable to fetch data:", error));
 }
 
@@ -21,6 +22,26 @@ const dp = 2; // header to p
 let x0 = 0;
 let z = 0;
 let src;
+
+
+function loadAudio(data) {
+  createAudio(data.Title.replace("mp3s\\", ""));
+  createAudio(data.Introduction.replace("mp3s\\", ""));
+  
+  drawLayout(data);
+}
+
+function createAudio(name) {
+  const audioEl = document.createElement("audio");
+  const url =
+    "https://cdn.glitch.global/53d6d00c-ae48-4ff9-bb80-4a61d4cfaa29/" +
+    name +
+    "?v=1725365680828";
+  audioEl.setAttribute("id", name);
+  audioEl.setAttribute("preload", "auto");
+  audioEl.setAttribute("src", url);
+  assetEl.appendChild(audioEl);
+}
 
 function drawLayout(data) {
   // console.log(data);
@@ -56,11 +77,6 @@ function drawLayout(data) {
   const sections = data.Sections;
   iterateSection(x0, 0, z, d1, sections, intro, "Sections_", 0);
 }
-
-function loadAudio(src) {
-  assets
-}
-
 
 function iterateSection(x, y, z, d, section, ele, prename, angle) {
   const num = Object.keys(section).length;
