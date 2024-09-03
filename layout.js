@@ -24,10 +24,10 @@ let z = 0;
 let src;
 
 function loadAudio(data) {
-  createAudio(data.Title.replace("mp3s\\", ""));
-  createAudio(data.Introduction.replace("mp3s\\", ""));
+//   createAudio(data.Title.replace("mp3s\\", ""));
+//   createAudio(data.Introduction.replace("mp3s\\", ""));
 
-  iterateAudio(data.Sections, "Sections_");
+//   iterateAudio(data.Sections, "Sections_");
 
   drawLayout(data);
 }
@@ -59,7 +59,7 @@ function createAudio(name) {
   audioEl.setAttribute("id", name);
   audioEl.setAttribute("preload", "auto");
   audioEl.setAttribute("src", url);
-  console.log(url);
+  // console.log(url);
   assetEl.appendChild(audioEl);
 }
 
@@ -151,6 +151,7 @@ function createElement(ele, x, y, z, col, c, id, s) {
   sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true");
   // console.log(x);
   // console.log(z);
+  console.log(s);
 
   ele.appendChild(sphereEl);
   return document.getElementById(id);
