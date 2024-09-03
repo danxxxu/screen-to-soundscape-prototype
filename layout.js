@@ -72,7 +72,6 @@ function iterateSection(x, y, z, d, section, ele, prename) {
     const id = key + i;
     const classH = "header";
     const el = createElement(ele, x1, y, z1, "#00FFFF", classH, id, header);
-    console.log(z1)
     i++;
 
     if (section[key].P != "") {
@@ -80,7 +79,7 @@ function iterateSection(x, y, z, d, section, ele, prename) {
       const idP = id + "_p";
       const classP = "p";
       const nameP = name + "_P.mp3";
-      createElement(el, x1, y, z1 - 1, "#FFFF00", classP, idP, nameP);
+      createElement(el, x1, y, z1 - dp, "#FFFF00", classP, idP, nameP);
     }
 
     if (section[key].Subsections) {
@@ -107,6 +106,8 @@ function createElement(ele, x, y, z, col, c, id, s) {
   sphereEl.setAttribute("class", c);
   sphereEl.setAttribute("id", id);
   sphereEl.setAttribute("sound", "src:#" + s);
+  console.log(x);
+  console.log(z);
 
   ele.appendChild(sphereEl);
   return document.getElementById(id);
