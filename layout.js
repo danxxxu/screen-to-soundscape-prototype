@@ -148,7 +148,7 @@ function createElement(ele, x, y, z, col, c, id, s) {
   sphereEl.setAttribute("position", x + " " + y + " " + z);
   sphereEl.setAttribute("class", c);
   sphereEl.setAttribute("id", id);
-  sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true");
+  sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true; loop: true");
   // console.log(x);
   // console.log(z);
   console.log(s);
