@@ -14,9 +14,9 @@ fetchJSONData();
 
 const sceneEl = document.querySelector("a-scene");
 const y = 1.5;
-const d1 = 8; // header 2
-const d2 = 5; // header2 to header3
-const dp = 2; // header to p
+const d1 = 5; // header 2
+const d2 = 3; // header2 to header3
+const dp = 1; // header to p
 let x0 = 0;
 let z = 0;
 let src;
@@ -24,19 +24,37 @@ let src;
 function drawLayout(data) {
   // console.log(data);
 
-  // title element
+  // title element; pink
   z = z - d1;
   src = data.Title;
-  const titleEl = createElement(sceneEl, x0, y, z, "title", "title", src);
+  const titleEl = createElement(
+    sceneEl,
+    x0,
+    y,
+    z,
+    "#EF2D5E",
+    "title",
+    "title",
+    src
+  );
 
-  // intro element
+  // intro element; pink
   z = z - d1;
   src = data.Introduction;
-  const intro = createElement(titleEl, x0, 0, z, "intro", "intro", src);
+  const intro = createElement(
+    titleEl,
+    x0,
+    0,
+    z,
+    "#EF2D5E",
+    "intro",
+    "intro",
+    src
+  );
 
   // sections
   const sections = data.Sections;
-  z = z - d1/2;
+  z = z - d1 / 2;
   iterateSection(x0, 0, z, d1, sections, intro, "Sections_");
 }
 
@@ -46,34 +64,42 @@ function iterateSection(x, y, z, d, section, ele, prename) {
   let i = 0;
   for (const key in section) {
     // console.log(section[key]);
-    //     header only
+    //     header only; blue color
     const name = prename + key.replace(":", "").replaceAll(" ", "_");
     const header = name + "_header.mp3";
     const x1 = x - d * Math.cos(deg * i);
-    const z1 = z - d1 * Math.sin(deg * i);
+    const z1 = z - d * Math.sin(deg * i);
     const id = key + i;
     const classH = "header";
-    const el = createElement(ele, x1, y, z1, classH, id, header);
+    const el = createElement(ele, x1, y, z1, "#00FFFF", classH, id, header);
     i++;
 
     if (section[key].P != "") {
-      //       load p
+      //       load p; yellow color
       const idP = id + "_p";
       const classP = "p";
       const nameP = name + "_P.mp3";
-      createElement(el, x1, y, z1, classP, idP, nameP);
+      createElement(el, x1, y, z1 - dp, "#FFFF00", classP, idP, nameP);
     }
 
     if (section[key].Subsections) {
       // console.log("sub!");
-      iterateSection(x1, y, z1, d2, section[key].Subsections, el, name + "_Subsections_");
+      iterateSection(
+        x1,
+        y,
+        z1,
+        d2,
+        section[key].Subsections,
+        el,
+        name + "_Subsections_"
+      );
     }
   }
 }
 
-function createElement(ele, x, y, z, c, id, s) {
+function createElement(ele, x, y, z, col, c, id, s) {
   const sphereEl = document.createElement("a-sphere");
-  sphereEl.setAttribute("color", "#EF2D5E");
+  sphereEl.setAttribute("color", col);
   sphereEl.setAttribute("shader", "flat");
   sphereEl.setAttribute("radius", "0.5");
   sphereEl.setAttribute("position", x + " " + y + " " + z);
