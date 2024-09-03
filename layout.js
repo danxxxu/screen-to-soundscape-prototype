@@ -13,10 +13,11 @@ function fetchJSONData() {
 fetchJSONData();
 
 const sceneEl = document.querySelector("a-scene");
+const assetEl = document.querySelector("a-assets");
 const y = 1.5;
 const d1 = 8; // header 2
-const d2 = 2; // header2 to header3
-const dp = 1; // header to p
+const d2 = 4; // header2 to header3
+const dp = 2; // header to p
 let x0 = 0;
 let z = 0;
 let src;
@@ -56,6 +57,11 @@ function drawLayout(data) {
   iterateSection(x0, 0, z, d1, sections, intro, "Sections_", 0);
 }
 
+function loadAudio(src) {
+  assets
+}
+
+
 function iterateSection(x, y, z, d, section, ele, prename, angle) {
   const num = Object.keys(section).length;
   const deg = Math.PI / (num - 1);
@@ -91,7 +97,8 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
         section[key].Subsections,
         el,
         name + "_Subsections_",
-        deg * i - 0.5 * Math.PI
+        0
+        // deg * i - 0.5 * Math.PI
       );
     }
     i++;
