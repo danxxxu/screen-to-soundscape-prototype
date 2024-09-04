@@ -124,20 +124,20 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
       createElement(el, xp, y, zp, "#FFFF00", classP, idP, nameP);
     }
 
-    if (section[key].Subsections) {
-      // console.log(key);
-      iterateSection(
-        x1,
-        y,
-        z1,
-        d2,
-        section[key].Subsections,
-        el,
-        name + "_Subsections_",
-        0
-        // deg * i - 0.5 * Math.PI
-      );
-    }
+    // if (section[key].Subsections) {
+    //   // console.log(key);
+    //   iterateSection(
+    //     x1,
+    //     y,
+    //     z1,
+    //     d2,
+    //     section[key].Subsections,
+    //     el,
+    //     name + "_Subsections_",
+    //     0
+    //     // deg * i - 0.5 * Math.PI
+    //   );
+    // }
     i++;
   }
 }
