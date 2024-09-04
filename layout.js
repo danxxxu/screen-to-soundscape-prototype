@@ -65,31 +65,31 @@ function drawLayout(data) {
   // console.log(data);
 
   // title element; pink
-  z = 0 - d1;
-  src = data.Title.replace("mp3s\\", "");
-  const titleEl = createElement(
-    sceneEl,
-    x0,
-    y,
-    z,
-    "#EF2D5E",
-    "title",
-    "title",
-    src
-  );
+  // z = 0 - d1;
+  // src = data.Title.replace("mp3s\\", "");
+  // const titleEl = createElement(
+  //   sceneEl,
+  //   x0,
+  //   y,
+  //   z,
+  //   "#EF2D5E",
+  //   "title",
+  //   "title",
+  //   src
+  // );
 
   // intro element; pink
-  src = data.Introduction.replace("mp3s\\", "");
-  const intro = createElement(
-    titleEl,
-    x0,
-    0,
-    z,
-    "#EF2D5E",
-    "intro",
-    "intro",
-    src
-  );
+  // src = data.Introduction.replace("mp3s\\", "");
+  // const intro = createElement(
+  //   titleEl,
+  //   x0,
+  //   0,
+  //   z,
+  //   "#EF2D5E",
+  //   "intro",
+  //   "intro",
+  //   src
+  // );
 
   // sections
   // iterateSection(x0, 0, z, d1, data.Sections, intro, "Sections_", 0);
@@ -150,7 +150,7 @@ function createElement(ele, x, y, z, col, c, id, s) {
   sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true; loop: true");
   // console.log(x);
   // console.log(z);
-  console.log(s);
+  console.log(sphereEl.getAttribute("sound"));
 
   ele.appendChild(sphereEl);
   return document.getElementById(id);
