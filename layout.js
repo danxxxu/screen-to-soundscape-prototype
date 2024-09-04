@@ -153,7 +153,7 @@ function createElement(ele, x, y, z, col, c, id, s) {
   sphereEl.setAttribute("id", id);
   sphereEl.setAttribute("sound", "src:#" + s);
   // sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true");
-  // console.log(x);
+  console.log(x);
   // console.log(z);
   console.log(s);
 
