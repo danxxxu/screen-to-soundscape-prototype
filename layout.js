@@ -23,6 +23,7 @@ let x0 = 0;
 let z = 0;
 let src;
 let sounds;
+let deg;
 
 function loadAudio(data) {
   createAudio(data.Title.replace("mp3s\\", "").replace(".mp3", ""));
@@ -101,7 +102,11 @@ function drawLayout(data) {
 
 function iterateSection(x, y, z, d, section, ele, prename, angle) {
   const num = Object.keys(section).length;
-  const deg = Math.PI / (num - 1);
+  if(num == 1) {
+    deg = Math.PI / 2;
+  } else {
+     deg = Math.PI / (num - 1); 
+  }
   let i = 0;
   for (const key in section) {
     // console.log(section[key]);
@@ -154,7 +159,7 @@ function createElement(ele, x, y, z, col, c, id, s) {
   sphereEl.setAttribute("sound", "src:#" + s);
   // sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true");
   console.log(x);
-  // console.log(z);
+  console.log(z);
   console.log(s);
 
   ele.appendChild(sphereEl);
