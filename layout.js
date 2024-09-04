@@ -123,7 +123,8 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
       const zp = 0 - dp * Math.sin(deg * i + angle);
       createElement(el, xp, y, zp, "#FFFF00", classP, idP, nameP);
     }
-
+    
+// problem part
     // if (section[key].Subsections) {
     //   // console.log(key);
     //   iterateSection(
