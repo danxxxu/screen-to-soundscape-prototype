@@ -24,10 +24,10 @@ let z = 0;
 let src;
 
 function loadAudio(data) {
-//   createAudio(data.Title.replace("mp3s\\", ""));
-//   createAudio(data.Introduction.replace("mp3s\\", ""));
+  createAudio(data.Title.replace("mp3s\\", ""));
+  createAudio(data.Introduction.replace("mp3s\\", ""));
 
-//   iterateAudio(data.Sections, "Sections_");
+  iterateAudio(data.Sections, "Sections_");
 
   drawLayout(data);
 }
@@ -53,8 +53,7 @@ function createAudio(name) {
   const audioEl = document.createElement("audio");
   const url =
     "https://cdn.glitch.global/53d6d00c-ae48-4ff9-bb80-4a61d4cfaa29/" +
-    name +
-    "?v=1725365680828";
+    name;
   // const url = "https://cdn.glitch.global/53d6d00c-ae48-4ff9-bb80-4a61d4cfaa29/Introduction.mp3?v=1725365680828";
   audioEl.setAttribute("id", name);
   audioEl.setAttribute("preload", "auto");
@@ -148,6 +147,7 @@ function createElement(ele, x, y, z, col, c, id, s) {
   sphereEl.setAttribute("position", x + " " + y + " " + z);
   sphereEl.setAttribute("class", c);
   sphereEl.setAttribute("id", id);
+  // sphereEl.setAttribute("sound", "src:#" + s);
   sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true; loop: true");
   // console.log(x);
   // console.log(z);
