@@ -22,10 +22,11 @@ const dp = 2; // header to p
 let x0 = 0;
 let z = 0;
 let src;
+let sounds;
 
 function loadAudio(data) {
-  createAudio(data.Title.replace("mp3s\\", ""));
-  createAudio(data.Introduction.replace("mp3s\\", ""));
+  createAudio(data.Title.replace("mp3s\\", "").replace(".mp3", ""));
+  createAudio(data.Introduction.replace("mp3s\\", "").replace(".mp3", ""));
 
   iterateAudio(data.Sections, "Sections_");
 
@@ -66,7 +67,7 @@ function drawLayout(data) {
 
   // title element; pink
   z = 0 - d1;
-  src = data.Title.replace("mp3s\\", "");
+  src = data.Title.replace("mp3s\\", "").replace(".mp3", "");
   const titleEl = createElement(
     sceneEl,
     x0,
@@ -79,7 +80,7 @@ function drawLayout(data) {
   );
 
   // intro element; pink
-  src = data.Introduction.replace("mp3s\\", "");
+  src = data.Introduction.replace("mp3s\\", "").replace(".mp3", "");
   const intro = createElement(
     titleEl,
     x0,
@@ -93,6 +94,9 @@ function drawLayout(data) {
 
   // sections
   iterateSection(x0, 0, z, d1, data.Sections, intro, "Sections_", 0);
+  
+  // select elements after creation 
+  sounds = document.querySelectorAll("a-sphere");
 }
 
 function iterateSection(x, y, z, d, section, ele, prename, angle) {
@@ -120,20 +124,20 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
       createElement(el, xp, y, zp, "#FFFF00", classP, idP, nameP);
     }
 
-//     if (section[key].Subsections) {
-//       // console.log(key);
-//       iterateSection(
-//         x1,
-//         y,
-//         z1,
-//         d2,
-//         section[key].Subsections,
-//         el,
-//         name + "_Subsections_",
-//         0
-//         // deg * i - 0.5 * Math.PI
-//       );
-//     }
+    if (section[key].Subsections) {
+      // console.log(key);
+      iterateSection(
+        x1,
+        y,
+        z1,
+        d2,
+        section[key].Subsections,
+        el,
+        name + "_Subsections_",
+        0
+        // deg * i - 0.5 * Math.PI
+      );
+    }
     i++;
   }
 }
@@ -146,11 +150,11 @@ function createElement(ele, x, y, z, col, c, id, s) {
   sphereEl.setAttribute("position", x + " " + y + " " + z);
   sphereEl.setAttribute("class", c);
   sphereEl.setAttribute("id", id);
-  // sphereEl.setAttribute("sound", "src:#" + s);
-  sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true");
+  sphereEl.setAttribute("sound", "src:#" + s);
+  // sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true");
   // console.log(x);
   // console.log(z);
-  // console.log(sphereEl.getAttribute("sound"));
+  console.log(s);
 
   ele.appendChild(sphereEl);
   return document.getElementById(id);
@@ -160,30 +164,30 @@ function distance(x1, z1, x2, z2) {
   return Math.sqrt((x1 - x2) * (x1 - x2) + (z1 - z2) * (z1 - z2));
 }
 
+
 // press space key play simultaneously
-// const sounds = document.querySelectorAll("a-sphere");
-// let playing = false;
+let playing = false;
 
-// document.addEventListener("keyup", (event) => {
-//   if (event.code === "Space") {
-//     // console.log(event.code);
-//     checkAudio();
-//     console.log(sounds);
-//   }
-// });
+document.addEventListener("keyup", (event) => {
+  if (event.code === "Space") {
+    // console.log(event.code);
+    checkAudio();
+    console.log(sounds);
+  }
+});
 
-// function checkAudio() {
-//   if (!playing) {
-//     sounds.forEach((s) => {
-//       s.components.sound.playSound();
-//     });
-//     playing = true;
-//     console.log("play");
-//   } else {
-//     sounds.forEach((s) => {
-//       s.components.sound.pauseSound();
-//     });
-//     playing = false;
-//     console.log("stop");
-//   }
-// }
+function checkAudio() {
+  if (!playing) {
+    sounds.forEach((s) => {
+      s.components.sound.playSound();
+    });
+    playing = true;
+    console.log("play");
+  } else {
+    sounds.forEach((s) => {
+      s.components.sound.pauseSound();
+    });
+    playing = false;
+    console.log("stop");
+  }
+}
