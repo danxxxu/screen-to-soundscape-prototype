@@ -43,8 +43,8 @@ function iterateAudio(section, prename) {
     if (section[key].P != "") {
       const nameP = name + "_P";
       createAudio(nameP);
-    } 
-    
+    }
+
     if (section[key].Subsections) {
       iterateAudio(section[key].Subsections, name + "_Subsections_");
     }
@@ -54,7 +54,9 @@ function iterateAudio(section, prename) {
 function createAudio(name) {
   const audioEl = document.createElement("audio");
   const url =
-    "https://cdn.glitch.global/53d6d00c-ae48-4ff9-bb80-4a61d4cfaa29/" + name + ".mp3";
+    "https://cdn.glitch.global/53d6d00c-ae48-4ff9-bb80-4a61d4cfaa29/" +
+    name +
+    ".mp3";
   // const url = "https://cdn.glitch.global/53d6d00c-ae48-4ff9-bb80-4a61d4cfaa29/Introduction.mp3?v=1725365680828";
   audioEl.setAttribute("id", name);
   audioEl.setAttribute("preload", "auto");
@@ -95,17 +97,17 @@ function drawLayout(data) {
 
   // sections
   iterateSection(x0, 0, z, d1, data.Sections, intro, "Sections_", 0);
-  
-  // select elements after creation 
+
+  // select elements after creation
   sounds = document.querySelectorAll("a-sphere");
 }
 
 function iterateSection(x, y, z, d, section, ele, prename, angle) {
   const num = Object.keys(section).length;
-  if(num == 1) {
+  if (num == 1) {
     deg = Math.PI / 2;
   } else {
-     deg = Math.PI / (num - 1); 
+    deg = Math.PI / (num - 1);
   }
   let i = 0;
   for (const key in section) {
@@ -128,8 +130,7 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
       const zp = 0 - dp * Math.sin(deg * i + angle);
       createElement(el, xp, y, zp, "#FFFF00", classP, idP, nameP);
     }
-    
-// problem part
+
     if (section[key].Subsections) {
       // console.log(key);
       iterateSection(
@@ -159,7 +160,7 @@ function createElement(ele, x, y, z, col, c, id, s) {
   sphereEl.setAttribute("sound", "src:#" + s);
   // sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true");
   console.log(x);
-  console.log(z);
+  // console.log(z);
   console.log(s);
 
   ele.appendChild(sphereEl);
@@ -169,7 +170,6 @@ function createElement(ele, x, y, z, col, c, id, s) {
 function distance(x1, z1, x2, z2) {
   return Math.sqrt((x1 - x2) * (x1 - x2) + (z1 - z2) * (z1 - z2));
 }
-
 
 // press space key play simultaneously
 let playing = false;
