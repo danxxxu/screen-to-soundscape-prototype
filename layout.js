@@ -24,8 +24,8 @@ let z = 0;
 let src;
 
 function loadAudio(data) {
-  createAudio(data.Title.replace("mp3s\\", ""));
-  createAudio(data.Introduction.replace("mp3s\\", ""));
+  // createAudio(data.Title.replace("mp3s\\", ""));
+  // createAudio(data.Introduction.replace("mp3s\\", ""));
 
   iterateAudio(data.Sections, "Sections_");
 
@@ -52,8 +52,7 @@ function iterateAudio(section, prename) {
 function createAudio(name) {
   const audioEl = document.createElement("audio");
   const url =
-    "https://cdn.glitch.global/53d6d00c-ae48-4ff9-bb80-4a61d4cfaa29/" +
-    name;
+    "https://cdn.glitch.global/53d6d00c-ae48-4ff9-bb80-4a61d4cfaa29/" + name;
   // const url = "https://cdn.glitch.global/53d6d00c-ae48-4ff9-bb80-4a61d4cfaa29/Introduction.mp3?v=1725365680828";
   audioEl.setAttribute("id", name);
   audioEl.setAttribute("preload", "auto");
@@ -147,8 +146,8 @@ function createElement(ele, x, y, z, col, c, id, s) {
   sphereEl.setAttribute("position", x + " " + y + " " + z);
   sphereEl.setAttribute("class", c);
   sphereEl.setAttribute("id", id);
-  // sphereEl.setAttribute("sound", "src:#" + s);
-  sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true; loop: true");
+  sphereEl.setAttribute("sound", "src:#" + s);
+  // sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true; loop: true");
   // console.log(x);
   // console.log(z);
   console.log(s);
@@ -159,4 +158,31 @@ function createElement(ele, x, y, z, col, c, id, s) {
 
 function distance(x1, z1, x2, z2) {
   return Math.sqrt((x1 - x2) * (x1 - x2) + (z1 - z2) * (z1 - z2));
+}
+
+// press space key play simultaneously
+const audio = document.querySelectorAll("a-sphere");
+let playing = false;
+
+document.addEventListener("keyup", (event) => {
+  if (event.code === "Space") {
+    // console.log(event.code);
+    checkAudio();
+  }
+});
+
+function checkAudio() {
+  if (!playing) {
+    audio.forEach((a) => {
+      a.components.sound.playSound();
+    });
+    playing = true;
+    console.log("play");
+  } else {
+    audio.forEach((a) => {
+      a.components.sound.pauseSound();
+    });
+    playing = false;
+    console.log("stop");
+  }
 }
