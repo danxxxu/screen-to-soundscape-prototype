@@ -86,6 +86,8 @@ function drawLayout(data) {
     "title",
     src
   );
+  titleEl.addEventListener('collide', function (evt) {
+  console.log('camera hit me!');});
 
   // intro element; pink
   src = data.Introduction.replace("mp3s\\", "").replace(".mp3", "");
@@ -106,7 +108,7 @@ function drawLayout(data) {
 //   console.log(minX);
 //   console.log(maxX);
 //   console.log(minZ);
-
+  
   // select elements after creation
   sounds = document.querySelectorAll("a-sphere");
 }
