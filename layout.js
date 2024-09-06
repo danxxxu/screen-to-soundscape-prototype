@@ -288,26 +288,26 @@ AFRAME.registerComponent("hit-bounds", {
     // limit Z
     if (this.el.object3D.position.z > z + margin) {
       this.el.object3D.position.z = z + margin;
-      hitBound = elZ + 1;
+      hitBound = z + margin + 1;
       bound.setAttribute("position", elX + " " + y + " " + hitBound);
       bound.components.sound.playSound();
     }
     if (this.el.object3D.position.z < minZ - margin) {
       this.el.object3D.position.z = minZ - margin;
-      hitBound = elZ - 1;
+      hitBound = minZ - margin - 1;
       bound.setAttribute("position", elX + " " + y + " " + hitBound);
       bound.components.sound.playSound();
     }
     // limit X
     if (this.el.object3D.position.x > maxX + margin) {
       this.el.object3D.position.x = maxX + margin;
-      hitBound = elX + 1;
+      hitBound = maxX + margin + 1;
       bound.setAttribute("position", hitBound + " " + y + " " + elZ);
       bound.components.sound.playSound();
     }
     if (this.el.object3D.position.x < minX - margin) {
       this.el.object3D.position.x = minX - margin;
-      hitBound = elX - 1;
+      hitBound = minX - margin - 1;
       bound.setAttribute("position", hitBound + " " + y + " " + elZ);
       bound.components.sound.playSound();
     }
