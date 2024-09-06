@@ -287,26 +287,26 @@ AFRAME.registerComponent("hit-bounds", {
     let hitBound;
     // limit Z
     if (this.el.object3D.position.z > z + margin) {
-      elZ = z + margin;
+      this.el.object3D.position.z = z + margin;
       hitBound = elZ + 1;
       bound.setAttribute("position", elX + " " + y + " " + hitBound);
       bound.components.sound.playSound();
     }
     if (this.el.object3D.position.z < minZ - margin) {
-      elZ = minZ - margin;
+      this.el.object3D.position.z = minZ - margin;
       hitBound = elZ - 1;
       bound.setAttribute("position", elX + " " + y + " " + hitBound);
       bound.components.sound.playSound();
     }
     // limit X
     if (this.el.object3D.position.x > maxX + margin) {
-      elX = maxX + margin;
+      this.el.object3D.position.x = maxX + margin;
       hitBound = elX + 1;
       bound.setAttribute("position", hitBound + " " + y + " " + elZ);
       bound.components.sound.playSound();
     }
     if (this.el.object3D.position.x < minX - margin) {
-      elX = minX - margin;
+      this.el.object3D.position.x = minX - margin;
       hitBound = elX - 1;
       bound.setAttribute("position", hitBound + " " + y + " " + elZ);
       bound.components.sound.playSound();
