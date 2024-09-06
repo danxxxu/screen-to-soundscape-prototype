@@ -86,8 +86,8 @@ function drawLayout(data) {
     "title",
     src
   );
-  titleEl.addEventListener('collide', function (evt) {
-  console.log('camera hit me!');});
+  // titleEl.addEventListener('collide', function (evt) {
+  // console.log('camera hit me!');});
 
   // intro element; pink
   src = data.Introduction.replace("mp3s\\", "").replace(".mp3", "");
