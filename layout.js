@@ -129,7 +129,7 @@ function drawLayout(data) {
   //   "bound",
   //   boundSrc
   // );
-  // //   console.log(minZ);
+    console.log(minZ);
   // createElement(
   //   sceneEl,
   //   x0,
@@ -253,20 +253,20 @@ let playing = false;
 document.addEventListener("keyup", (event) => {
   if (event.code === "Space") {
     // console.log(event.code);
-    checkAudio();
-    console.log(sounds);
+    checkAudio(sounds);
+    // console.log(sounds);
   }
 });
 
-function checkAudio() {
+function checkAudio(audioArray) {
   if (!playing) {
-    sounds.forEach((s) => {
+    audioArray.forEach((s) => {
       s.components.sound.playSound();
     });
     playing = true;
     console.log("play");
   } else {
-    sounds.forEach((s) => {
+    audioArray.forEach((s) => {
       s.components.sound.pauseSound();
     });
     playing = false;
@@ -283,7 +283,7 @@ AFRAME.registerComponent("hit-bounds", {
     const bound = document.querySelector("#bound");
     let elX = this.el.object3D.position.x;
     let elZ = this.el.object3D.position.z;
-    console.log(elX);
+    // console.log(elX);
     let hitBound;
     // limit Z
     if (this.el.object3D.position.z > z + margin) {
@@ -295,6 +295,7 @@ AFRAME.registerComponent("hit-bounds", {
     if (this.el.object3D.position.z < minZ - margin) {
       this.el.object3D.position.z = minZ - margin;
       hitBound = minZ - margin - 1;
+      console.log(hitBound)
       bound.setAttribute("position", elX + " " + y + " " + hitBound);
       bound.components.sound.playSound();
     }
