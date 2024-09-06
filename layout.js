@@ -107,8 +107,6 @@ function drawLayout(data) {
   iterateSection(x0, 0, z, d1, data.Sections, intro, "Sections_", 0);
 
   // create boundary sound object #F0FFFF ivory color
-  const boundSrc =
-    "https://cdn.glitch.global/53d6d00c-ae48-4ff9-bb80-4a61d4cfaa29/bouncy%20ball%20boundry%202.wav?v=1725615444014";
   //   console.log(minX);
   createElement(
     sceneEl,
@@ -118,7 +116,7 @@ function drawLayout(data) {
     "#F0FFFF",
     "sound-cues",
     "bound",
-    boundSrc
+    "bound-cue"
   );
   // //   console.log(maxX);
   // createElement(
@@ -285,23 +283,33 @@ AFRAME.registerComponent("hit-bounds", {
     const bound = document.querySelector("#bound");
     let elX = this.el.object3D.position.x;
     let elZ = this.el.object3D.position.z;
+    console.log(elX);
+    let hitBound;
     // limit Z
     if (this.el.object3D.position.z > z + margin) {
       elZ = z + margin;
+      hitBound = elZ + 1;
+      bound.setAttribute("position", elX + " " + y + " " + hitBound);
+      bound.components.sound.playSound();
     }
     if (this.el.object3D.position.z < minZ - margin) {
       elZ = minZ - margin;
+      hitBound = elZ - 1;
+      bound.setAttribute("position", elX + " " + y + " " + hitBound);
+      bound.components.sound.playSound();
     }
-
     // limit X
     if (this.el.object3D.position.x > maxX + margin) {
       elX = maxX + margin;
+      hitBound = elX + 1;
+      bound.setAttribute("position", hitBound + " " + y + " " + elZ);
+      bound.components.sound.playSound();
     }
     if (this.el.object3D.position.x < minX - margin) {
       elX = minX - margin;
-    }
-    
-      bound.setAttribute("position", elX + " " + y + " " + elZ);
+      hitBound = elX - 1;
+      bound.setAttribute("position", hitBound + " " + y + " " + elZ);
       bound.components.sound.playSound();
+    }
   },
 });
