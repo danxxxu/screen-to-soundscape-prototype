@@ -118,9 +118,9 @@ function drawLayout(data) {
     "bound",
     "bound-cue"
   );
-  // //   console.log(maxX);
-    console.log(minZ);
-
+  console.log("MAXX: " + maxX);
+  console.log("MINX: " + minX);
+  console.log("MINZ: " + minZ);
 
   // select elements after creation
   sounds = document.querySelectorAll("a-sphere");
@@ -207,8 +207,8 @@ function createElement(ele, x, y, z, col, c, id, s) {
   sphereEl.setAttribute("id", id);
   sphereEl.setAttribute("sound", "src:#" + s);
   // sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true");
-  // console.log(x);
-  // console.log(z);
+  console.log(x);
+  console.log(z);
   // console.log(s);
 
   ele.appendChild(sphereEl);
@@ -224,7 +224,7 @@ let playing = false;
 document.addEventListener("keyup", (event) => {
   if (event.code === "Space") {
     // console.log(event.code);
-    checkAudio(sounds);Ï
+    checkAudio(sounds);
     // console.log(sounds);
   }
 });
@@ -265,7 +265,7 @@ AFRAME.registerComponent("hit-bounds", {
     if (this.el.object3D.position.z < minZ - margin) {
       this.el.object3D.position.z = minZ - margin;
       hitBound = minZ - margin - 1;
-      console.log(hitBound)
+      console.log("MINZ: " + minZ);
       bound.setAttribute("position", elX + " " + y + " " + hitBound);
     }
     // limit X
