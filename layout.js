@@ -105,9 +105,15 @@ function drawLayout(data) {
   // sections
   iterateSection(x0, 0, z, d1, data.Sections, intro, "Sections_", 0);
 
+  // create boundary sound object #F0FFFF ivory color
+  const boundSrc = "https://cdn.glitch.global/53d6d00c-ae48-4ff9-bb80-4a61d4cfaa29/bouncy%20ball%20boundry%202.wav?v=1725615444014";
 //   console.log(minX);
+    createElement(sceneEl, minX - 2, y, z, "#F0FFFF", "sound-cues", "bound", boundSrc);
 //   console.log(maxX);
+      createElement(sceneEl, maxX + 2, y, z, "#F0FFFF", "sound-cues", "bound", boundSrc);
 //   console.log(minZ);
+      createElement(sceneEl, x0, y, z, "#F0FFFF", "sound-cues", "bound", boundSrc);
+
   
   // select elements after creation
   sounds = document.querySelectorAll("a-sphere");
