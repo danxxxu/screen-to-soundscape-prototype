@@ -24,7 +24,11 @@ let z = 0;
 let src;
 let sounds;
 let deg;
+let minX = 0,
+  maxX = 0,
+  minZ = 0; //get boundaries
 
+//////////////// LOAD AUDIO ////////////////
 function loadAudio(data) {
   createAudio(data.Title.replace("mp3s\\", "").replace(".mp3", ""));
   createAudio(data.Introduction.replace("mp3s\\", "").replace(".mp3", ""));
@@ -65,6 +69,7 @@ function createAudio(name) {
   assetEl.appendChild(audioEl);
 }
 
+//////////////// DRAW LAYOUT ////////////////
 function drawLayout(data) {
   // console.log(data);
 
@@ -98,6 +103,10 @@ function drawLayout(data) {
   // sections
   iterateSection(x0, 0, z, d1, data.Sections, intro, "Sections_", 0);
 
+//   console.log(minX);
+//   console.log(maxX);
+//   console.log(minZ);
+
   // select elements after creation
   sounds = document.querySelectorAll("a-sphere");
 }
@@ -116,7 +125,19 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
     const name = prename + key.replace(":", "").replaceAll(" ", "_");
     const header = name + "_header";
     const x1 = 0 - d * Math.cos(deg * i + angle);
+    if (x1 < 0) {
+      if (x1 < minX) {
+        minX = x1;
+      }
+    } else {
+      if (x1 > maxX) {
+        maxX = x1;
+      }
+    }
     const z1 = 0 - d / 2 - d * Math.sin(deg * i + angle);
+    if (z1 < minZ) {
+      minZ = z1;
+    }
     const id = key + i;
     const classH = "header";
     const el = createElement(ele, x1, y, z1, "#00FFFF", classH, id, header);
@@ -127,7 +148,19 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
       const classP = "p";
       const nameP = name + "_P";
       const xp = 0 - dp * Math.cos(deg * i + angle);
+      if (xp < 0) {
+        if (xp < minX) {
+          minX = xp;
+        }
+      } else {
+        if (xp > maxX) {
+          maxX = xp;
+        }
+      }
       const zp = 0 - dp * Math.sin(deg * i + angle);
+      if (zp < minZ) {
+        minZ = zp;
+      }
       createElement(el, xp, y, zp, "#FFFF00", classP, idP, nameP);
     }
 
@@ -159,9 +192,9 @@ function createElement(ele, x, y, z, col, c, id, s) {
   sphereEl.setAttribute("id", id);
   sphereEl.setAttribute("sound", "src:#" + s);
   // sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true");
-  console.log(x);
+  // console.log(x);
   // console.log(z);
-  console.log(s);
+  // console.log(s);
 
   ele.appendChild(sphereEl);
   return document.getElementById(id);
@@ -171,9 +204,8 @@ function distance(x1, z1, x2, z2) {
   return Math.sqrt((x1 - x2) * (x1 - x2) + (z1 - z2) * (z1 - z2));
 }
 
-// press space key play simultaneously
+//////////////// PLAY AUDIO ////////////////
 let playing = false;
-
 document.addEventListener("keyup", (event) => {
   if (event.code === "Space") {
     // console.log(event.code);
@@ -197,3 +229,5 @@ function checkAudio() {
     console.log("stop");
   }
 }
+
+//////////////// CAMERA BOUNDARY ////////////////
