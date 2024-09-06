@@ -253,22 +253,37 @@ let playing = false;
 document.addEventListener("keyup", (event) => {
   if (event.code === "Space") {
     // console.log(event.code);
-    checkAudio(sounds);
+    sounds.forEach((s) => {
+      checkAudio(s);
+    });
+    // checkAudio(sounds);
     // console.log(sounds);
   }
 });
 
-function checkAudio(audioArray) {
+// function checkAudio(audioArray) {
+//   if (!playing) {
+//     audioArray.forEach((s) => {
+//       s.components.sound.playSound();
+//     });
+//     playing = true;
+//     console.log("play");
+//   } else {
+//     audioArray.forEach((s) => {
+//       s.components.sound.pauseSound();
+//     });
+//     playing = false;
+//     console.log("stop");
+//   }
+// }
+
+function checkAudio(a) {
   if (!playing) {
-    audioArray.forEach((s) => {
-      s.components.sound.playSound();
-    });
+    a.components.sound.playSound();
     playing = true;
     console.log("play");
   } else {
-    audioArray.forEach((s) => {
-      s.components.sound.pauseSound();
-    });
+    a.components.sound.pauseSound();
     playing = false;
     console.log("stop");
   }
@@ -290,27 +305,27 @@ AFRAME.registerComponent("hit-bounds", {
       this.el.object3D.position.z = z + margin;
       hitBound = z + margin + 1;
       bound.setAttribute("position", elX + " " + y + " " + hitBound);
-      bound.components.sound.playSound();
+      checkAudio(bound);
     }
     if (this.el.object3D.position.z < minZ - margin) {
       this.el.object3D.position.z = minZ - margin;
       hitBound = minZ - margin - 1;
       console.log(hitBound)
       bound.setAttribute("position", elX + " " + y + " " + hitBound);
-      bound.components.sound.playSound();
+      checkAudio(bound);
     }
     // limit X
     if (this.el.object3D.position.x > maxX + margin) {
       this.el.object3D.position.x = maxX + margin;
       hitBound = maxX + margin + 1;
       bound.setAttribute("position", hitBound + " " + y + " " + elZ);
-      bound.components.sound.playSound();
+      checkAudio(bound);
     }
     if (this.el.object3D.position.x < minX - margin) {
       this.el.object3D.position.x = minX - margin;
       hitBound = minX - margin - 1;
       bound.setAttribute("position", hitBound + " " + y + " " + elZ);
-      bound.components.sound.playSound();
+      checkAudio(bound);
     }
   },
 });
