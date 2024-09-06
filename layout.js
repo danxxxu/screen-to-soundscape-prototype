@@ -119,37 +119,8 @@ function drawLayout(data) {
     "bound-cue"
   );
   // //   console.log(maxX);
-  // createElement(
-  //   sceneEl,
-  //   maxX + margin,
-  //   y,
-  //   z,
-  //   "#F0FFFF",
-  //   "sound-cues",
-  //   "bound",
-  //   boundSrc
-  // );
     console.log(minZ);
-  // createElement(
-  //   sceneEl,
-  //   x0,
-  //   y,
-  //   minZ - margin,
-  //   "#F0FFFF",
-  //   "sound-cues",
-  //   "bound",
-  //   boundSrc
-  // );
-  // createElement(
-  //   sceneEl,
-  //   x0,
-  //   y,
-  //   z + margin,
-  //   "#F0FFFF",
-  //   "sound-cues",
-  //   "bound",
-  //   boundSrc
-  // );
+
 
   // select elements after creation
   sounds = document.querySelectorAll("a-sphere");
@@ -253,37 +224,22 @@ let playing = false;
 document.addEventListener("keyup", (event) => {
   if (event.code === "Space") {
     // console.log(event.code);
-    sounds.forEach((s) => {
-      checkAudio(s);
-    });
-    // checkAudio(sounds);
+    checkAudio(sounds);Ï
     // console.log(sounds);
   }
 });
 
-// function checkAudio(audioArray) {
-//   if (!playing) {
-//     audioArray.forEach((s) => {
-//       s.components.sound.playSound();
-//     });
-//     playing = true;
-//     console.log("play");
-//   } else {
-//     audioArray.forEach((s) => {
-//       s.components.sound.pauseSound();
-//     });
-//     playing = false;
-//     console.log("stop");
-//   }
-// }
-
-function checkAudio(a) {
+function checkAudio(audioArray) {
   if (!playing) {
-    a.components.sound.playSound();
+    audioArray.forEach((s) => {
+      s.components.sound.playSound();
+    });
     playing = true;
     console.log("play");
   } else {
-    a.components.sound.pauseSound();
+    audioArray.forEach((s) => {
+      s.components.sound.pauseSound();
+    });
     playing = false;
     console.log("stop");
   }
@@ -305,27 +261,23 @@ AFRAME.registerComponent("hit-bounds", {
       this.el.object3D.position.z = z + margin;
       hitBound = z + margin + 1;
       bound.setAttribute("position", elX + " " + y + " " + hitBound);
-      checkAudio(bound);
     }
     if (this.el.object3D.position.z < minZ - margin) {
       this.el.object3D.position.z = minZ - margin;
       hitBound = minZ - margin - 1;
       console.log(hitBound)
       bound.setAttribute("position", elX + " " + y + " " + hitBound);
-      checkAudio(bound);
     }
     // limit X
     if (this.el.object3D.position.x > maxX + margin) {
       this.el.object3D.position.x = maxX + margin;
       hitBound = maxX + margin + 1;
       bound.setAttribute("position", hitBound + " " + y + " " + elZ);
-      checkAudio(bound);
     }
     if (this.el.object3D.position.x < minX - margin) {
       this.el.object3D.position.x = minX - margin;
       hitBound = minX - margin - 1;
       bound.setAttribute("position", hitBound + " " + y + " " + elZ);
-      checkAudio(bound);
     }
   },
 });
