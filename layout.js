@@ -28,6 +28,7 @@ let minX = 0,
   maxX = 0,
   minZ = 0;
 const margin = 2; //get boundaries
+let realWorldPos = new THREE.Vector3();
 
 //////////////// LOAD AUDIO ////////////////
 function loadAudio(data) {
@@ -118,9 +119,9 @@ function drawLayout(data) {
     "bound",
     "bound-cue"
   );
-  console.log("MAXX: " + maxX);
-  console.log("MINX: " + minX);
-  console.log("MINZ: " + minZ);
+  // console.log("MAXX: " + maxX);
+  // console.log("MINX: " + minX);
+  // console.log("MINZ: " + minZ);
 
   // select elements after creation
   sounds = document.querySelectorAll("a-sphere");
@@ -156,8 +157,10 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
     const id = key + i;
     const classH = "header";
     const el = createElement(ele, x1, y, z1, "#00FFFF", classH, id, header);
-    
-      //       load p; yellow color
+    el.getObject3D("mesh")getWorldPosition(realWorldPos);
+    console.log("real: " + realWorldPos.x);
+
+    //       load p; yellow color
     if (section[key].P != "") {
       const idP = id + "_p";
       const classP = "p";
@@ -179,6 +182,7 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
       createElement(el, xp, y, zp, "#FFFF00", classP, idP, nameP);
     }
 
+    // iterate subsections
     if (section[key].Subsections) {
       // console.log(key);
       iterateSection(
@@ -208,7 +212,7 @@ function createElement(ele, x, y, z, col, c, id, s) {
   sphereEl.setAttribute("sound", "src:#" + s);
   // sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true");
   console.log(x);
-  console.log(z);
+  // console.log(z);
   // console.log(s);
 
   ele.appendChild(sphereEl);
