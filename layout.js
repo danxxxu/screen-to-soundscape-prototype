@@ -157,8 +157,8 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
     const id = key + i;
     const classH = "header";
     const el = createElement(ele, x1, y, z1, "#00FFFF", classH, id, header);
-    el.getObject3D("mesh")getWorldPosition(realWorldPos);
-    console.log("real: " + realWorldPos.x);
+    el.object3D.getWorldPosition(realWorldPos);
+    console.log("real: " + realWorldPos.z);
 
     //       load p; yellow color
     if (section[key].P != "") {
