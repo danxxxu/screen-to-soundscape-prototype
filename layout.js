@@ -30,11 +30,6 @@ let minX = 0,
 const margin = 2; //get boundaries
 let realWorldPos = new THREE.Vector3();
 
-var cameraEl = document.querySelector('[camera');
-var worldPos = new THREE.Vector3();
-worldPos.setFromMatrixPosition(cameraEl.object3D.matrixWorld);
-console.log(worldPos.x);
-
 //////////////// LOAD AUDIO ////////////////
 function loadAudio(data) {
   createAudio(data.Title.replace("mp3s\\", "").replace(".mp3", ""));
@@ -108,7 +103,7 @@ function drawLayout(data) {
     "intro",
     src
   );
-
+  
   // sections
   iterateSection(x0, 0, z, d1, data.Sections, intro, "Sections_", 0);
 
@@ -254,6 +249,28 @@ function checkAudio(audioArray) {
     console.log("stop");
   }
 }
+
+//////////////// GET WORLD POS //////////////// 
+AFRAME.registerComponent("world pos", {
+    init: function() {
+      this.worldpos = new THREE.Vector3();
+    },
+    // called on each frame
+    tick: function() {
+      // getAttribute("position") has the local position
+      // this.el.object3D.position has the local position
+      // this.el.getObject3D("mesh").position has the local position
+      this.localpos.copy(this.el.getAttribute("position"))
+      this.el.getObject3D("mesh").getWorldPosition(this.worldpos)
+
+      // compose the displayed message
+      let msg = "";
+      msg += "Sphere local position:" + this.posToString(this.localpos)
+      msg += "<br>"
+      msg += "Sphere world position:" + this.posToString(this.worldpos)
+      this.textEl.innerHTML = msg
+    }
+  })
 
 //////////////// HIT BOUND ////////////////
 AFRAME.registerComponent("hit-bounds", {

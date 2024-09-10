@@ -6,7 +6,7 @@
   <body>
     <a-scene>
       <a-assets>
-      <audio
+        <audio
           id="bound-cue"
           preload="auto"
           src="https://cdn.glitch.global/53d6d00c-ae48-4ff9-bb80-4a61d4cfaa29/bouncy%20ball%20boundry%202.wav?v=1725615444014"
@@ -15,6 +15,7 @@
       <!--   add cursor     -->
       <a-camera camera-listener hit-bounds>
         <a-entity
+          id="camera"
           cursor="fuse: true; fuseTimeout: 500"
           position="0 0 -1"
           geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.02"
