@@ -30,6 +30,11 @@ let minX = 0,
 const margin = 2; //get boundaries
 let realWorldPos = new THREE.Vector3();
 
+var cameraEl = document.querySelector('[camera');
+var worldPos = new THREE.Vector3();
+worldPos.setFromMatrixPosition(cameraEl.object3D.matrixWorld);
+console.log(worldPos.x);
+
 //////////////// LOAD AUDIO ////////////////
 function loadAudio(data) {
   createAudio(data.Title.replace("mp3s\\", "").replace(".mp3", ""));
@@ -157,8 +162,9 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
     const id = key + i;
     const classH = "header";
     const el = createElement(ele, x1, y, z1, "#00FFFF", classH, id, header);
-    el.object3D.getWorldPosition(realWorldPos);
-    console.log("real: " + realWorldPos.z);
+    // realWorldPos.setFromMatrixPosition(el.object3D.matrixWorld);
+    // el.object3D.getWorldPosition(realWorldPos);
+    // console.log(realWorldPos.setFromMatrixPosition(el.object3D.matrixWorld));
 
     //       load p; yellow color
     if (section[key].P != "") {
