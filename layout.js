@@ -252,6 +252,7 @@ AFRAME.registerComponent("world-pos", {
 });
 
 //////////////// HIT BOUND ////////////////
+let hit = false;
 AFRAME.registerComponent("hit-bounds", {
   init: function () {
     // nothing here
@@ -268,7 +269,10 @@ AFRAME.registerComponent("hit-bounds", {
       hitBound = z + margin + 1;
       bound.object3D.position.x = elX;
       bound.object3D.position.z = hitBound;
-      bound.components.sound.playSound();
+      if (!hit) {
+        bound.components.sound.playSound();
+        hit = true;
+      }
     }
     if (this.el.object3D.position.z < minZ - margin) {
       this.el.object3D.position.z = minZ - margin;
@@ -276,7 +280,7 @@ AFRAME.registerComponent("hit-bounds", {
       // console.log("MINZ: " + minZ);
       bound.object3D.position.x = elX;
       bound.object3D.position.z = hitBound;
-      bound.components.sound.playSound();
+      // bound.components.sound.playSound();
     }
     // limit X
     if (this.el.object3D.position.x > maxX + margin) {
@@ -284,23 +288,23 @@ AFRAME.registerComponent("hit-bounds", {
       hitBound = maxX + margin + 1;
       bound.object3D.position.x = hitBound;
       bound.object3D.position.z = elZ;
-      bound.components.sound.playSound();
+      // bound.components.sound.playSound();
     }
     if (this.el.object3D.position.x < minX - margin) {
       this.el.object3D.position.x = minX - margin;
       hitBound = minX - margin - 1;
       bound.object3D.position.x = hitBound;
       bound.object3D.position.z = elZ;
-      bound.components.sound.playSound();
+      // bound.components.sound.playSound();
     }
   },
 });
 
- on(document.querySelector("#camera"),'collide',(e)=>{
-        const bound = document.querySelector("#bound");
-        if(e.detail.body.id === ball.body.id && !hit) {
-            hit = true
-
-           bound.components.sound.playSound();
-        }
-    })
+// let hit = false;
+// on(document.querySelector("#camera"), "collide", (e) => {
+//   const bound = document.querySelector("#bound");
+//   if (e.detail.body.id === bound.body.id && !hit) {
+//     hit = true;
+//     bound.components.sound.playSound();
+//   }
+// });
