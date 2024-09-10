@@ -1,6 +1,7 @@
 <html>
   <head>
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v4.0.1/dist/aframe-physics-system.min.js"></script>
     <script src="layout.js" defer></script>
   </head>
   <body>
@@ -13,7 +14,7 @@
         ></audio>
       </a-assets>
       <!--   add cursor     -->
-      <a-camera camera-listener hit-bounds>
+      <a-camera camera-listener hit-bounds foo>
         <a-entity
           id="camera"
           cursor="fuse: true; fuseTimeout: 500"
