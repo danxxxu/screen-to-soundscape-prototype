@@ -15,7 +15,7 @@ fetchJSONData();
 
 const sceneEl = document.querySelector("a-scene");
 const assetEl = document.querySelector("a-assets");
-const y = 1.5;
+const y = 1.6;
 const d1 = 8; // header 2
 const d2 = 4; // header2 to header3
 const dp = 2; // header to p
@@ -271,7 +271,7 @@ AFRAME.registerComponent("hit-bounds", {
       if (!hit) {
         hit = true;
         bound.components.sound.playSound();
-        console.log("hit" + this.el.object3D.position.z);
+        // console.log("hit" + this.el.object3D.position.z);
       }
     }
     if (this.el.object3D.position.z < minZ - margin) {
@@ -297,7 +297,6 @@ AFRAME.registerComponent("hit-bounds", {
         bound.components.sound.playSound();
         console.log("hit");
       }
-      // bound.components.sound.playSound();
     }
     if (this.el.object3D.position.x < minX - margin) {
       this.el.object3D.position.x = minX - margin;
@@ -309,10 +308,15 @@ AFRAME.registerComponent("hit-bounds", {
         bound.components.sound.playSound();
         console.log("hit");
       }
-      // bound.components.sound.playSound();
     }
-    // if (!hit) {
-    //   bound.components.sound.playSound();
-    // }
+
+    if (
+      this.el.object3D.position.x > minX - margin &&
+      this.el.object3D.position.x < maxX + margin &&
+      this.el.object3D.position.z > minZ - margin &&
+      this.el.object3D.position.z < z0 + margin
+    ) {
+      hit = false;
+    }
   },
 });
