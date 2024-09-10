@@ -141,15 +141,6 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
     const name = prename + key.replace(":", "").replaceAll(" ", "_");
     const header = name + "_header";
     const x1 = 0 - d * Math.cos(deg * i + angle);
-    if (x1 < 0) {
-      if (x1 < minX) {
-        minX = x1;
-      }
-    } else {
-      if (x1 > maxX) {
-        maxX = x1;
-      }
-    }
     const z1 = 0 - d / 2 - d * Math.sin(deg * i + angle);
     if (z1 < minZ) {
       minZ = z1;
@@ -167,15 +158,6 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
       const classP = "p";
       const nameP = name + "_P";
       const xp = 0 - dp * Math.cos(deg * i + angle);
-      if (xp < 0) {
-        if (xp < minX) {
-          minX = xp;
-        }
-      } else {
-        if (xp > maxX) {
-          maxX = xp;
-        }
-      }
       const zp = 0 - dp * Math.sin(deg * i + angle);
       if (zp < minZ) {
         minZ = zp;
@@ -211,8 +193,9 @@ function createElement(ele, x, y, z, col, c, id, s) {
   sphereEl.setAttribute("class", c);
   sphereEl.setAttribute("id", id);
   sphereEl.setAttribute("sound", "src:#" + s);
+  sphereEl.setAttribute("world-pos", "");
   // sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true");
-  console.log(x);
+  // console.log(x);
   // console.log(z);
   // console.log(s);
 
@@ -251,24 +234,22 @@ function checkAudio(audioArray) {
 }
 
 //////////////// GET WORLD POS //////////////// 
-AFRAME.registerComponent("world pos", {
+AFRAME.registerComponent("world-pos", {
     init: function() {
       this.worldpos = new THREE.Vector3();
     },
-    // called on each frame
-    tick: function() {
-      // getAttribute("position") has the local position
-      // this.el.object3D.position has the local position
-      // this.el.getObject3D("mesh").position has the local position
-      this.localpos.copy(this.el.getAttribute("position"))
-      this.el.getObject3D("mesh").getWorldPosition(this.worldpos)
-
-      // compose the displayed message
-      let msg = "";
-      msg += "Sphere local position:" + this.posToString(this.localpos)
-      msg += "<br>"
-      msg += "Sphere world position:" + this.posToString(this.worldpos)
-      this.textEl.innerHTML = msg
+    update: function() {
+      this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
+      console.log(this.worldpos);
+      if (this.worldpos.x < 0) {
+      if (this.worldpos.x < minX) {
+        minX = this.worldpos.x;
+      }
+    } else {
+      if (this.worldpos.x > maxX) {
+        maxX = x1;
+      }
+    }
     }
   })
 
