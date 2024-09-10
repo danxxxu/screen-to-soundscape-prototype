@@ -21,7 +21,7 @@ const d2 = 4; // header2 to header3
 const dp = 2; // header to p
 let x0 = 0;
 let z = 0;
-
+let z0 = 0;
 let src;
 let sounds;
 let deg;
@@ -89,8 +89,6 @@ function drawLayout(data) {
     "title",
     src
   );
-  // titleEl.addEventListener('collide', function (evt) {
-  // console.log('camera hit me!');});
 
   // intro element; pink
   src = data.Introduction.replace("mp3s\\", "").replace(".mp3", "");
@@ -107,6 +105,8 @@ function drawLayout(data) {
 
   // sections
   iterateSection(x0, 0, z, d1, data.Sections, intro, "Sections_", 0);
+  // select elements after creation
+  sounds = document.querySelectorAll("a-sphere");
 
   // create boundary sound object #F0FFFF ivory color
   //   console.log(minX);
@@ -114,7 +114,7 @@ function drawLayout(data) {
     sceneEl,
     minX - margin,
     y,
-    z + margin,
+    z0 + margin,
     "#F0FFFF",
     "sound-cues",
     "bound",
@@ -124,9 +124,6 @@ function drawLayout(data) {
   // console.log("MAXX: " + maxX);
   // console.log("MINX: " + minX);
   // console.log("MINZ: " + minZ);
-
-  // select elements after creation
-  sounds = document.querySelectorAll("a-sphere");
 }
 
 function iterateSection(x, y, z, d, section, ele, prename, angle) {
@@ -266,15 +263,15 @@ AFRAME.registerComponent("hit-bounds", {
     // console.log(elX);
     let hitBound;
     // limit Z
-    if (this.el.object3D.position.z > z + margin) {
-      this.el.object3D.position.z = z + margin;
-      hitBound = z + margin + 1;
+    if (this.el.object3D.position.z > z0 + margin) {
+      this.el.object3D.position.z = z0 + margin;
+      hitBound = z0 + margin + 1;
       bound.object3D.position.x = elX;
       bound.object3D.position.z = hitBound;
       if (!hit) {
         hit = true;
         bound.components.sound.playSound();
-        console.log("hit" + z + margin)
+        console.log("hit" + this.el.object3D.position.z);
       }
     }
     if (this.el.object3D.position.z < minZ - margin) {
@@ -286,7 +283,7 @@ AFRAME.registerComponent("hit-bounds", {
       if (!hit) {
         hit = true;
         bound.components.sound.playSound();
-                console.log("hit")
+        console.log("hit");
       }
     }
     // limit X
@@ -298,7 +295,7 @@ AFRAME.registerComponent("hit-bounds", {
       if (!hit) {
         hit = true;
         bound.components.sound.playSound();
-                console.log("hit")
+        console.log("hit");
       }
       // bound.components.sound.playSound();
     }
@@ -310,8 +307,7 @@ AFRAME.registerComponent("hit-bounds", {
       if (!hit) {
         hit = true;
         bound.components.sound.playSound();
-                console.log("hit")
-
+        console.log("hit");
       }
       // bound.components.sound.playSound();
     }
@@ -320,12 +316,3 @@ AFRAME.registerComponent("hit-bounds", {
     // }
   },
 });
-
-// let hit = false;
-// on(document.querySelector("#camera"), "collide", (e) => {
-//   const bound = document.querySelector("#bound");
-//   if (e.detail.body.id === bound.body.id && !hit) {
-//     hit = true;
-//     bound.components.sound.playSound();
-//   }
-// });
