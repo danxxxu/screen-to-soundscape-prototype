@@ -103,7 +103,7 @@ function drawLayout(data) {
     "intro",
     src
   );
-  
+
   // sections
   iterateSection(x0, 0, z, d1, data.Sections, intro, "Sections_", 0);
 
@@ -142,9 +142,6 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
     const header = name + "_header";
     const x1 = 0 - d * Math.cos(deg * i + angle);
     const z1 = 0 - d / 2 - d * Math.sin(deg * i + angle);
-    if (z1 < minZ) {
-      minZ = z1;
-    }
     const id = key + i;
     const classH = "header";
     const el = createElement(ele, x1, y, z1, "#00FFFF", classH, id, header);
@@ -159,9 +156,6 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
       const nameP = name + "_P";
       const xp = 0 - dp * Math.cos(deg * i + angle);
       const zp = 0 - dp * Math.sin(deg * i + angle);
-      if (zp < minZ) {
-        minZ = zp;
-      }
       createElement(el, xp, y, zp, "#FFFF00", classP, idP, nameP);
     }
 
@@ -233,25 +227,29 @@ function checkAudio(audioArray) {
   }
 }
 
-//////////////// GET WORLD POS //////////////// 
+//////////////// GET WORLD POS ////////////////
 AFRAME.registerComponent("world-pos", {
-    init: function() {
-      this.worldpos = new THREE.Vector3();
-    },
-    update: function() {
-      this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
-      console.log(this.worldpos);
-      if (this.worldpos.x < 0) {
+  init: function () {
+    this.worldpos = new THREE.Vector3();
+  },
+  update: function () {
+    this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
+    console.log(this.worldpos);
+    if (this.worldpos.x < 0) {
       if (this.worldpos.x < minX) {
         minX = this.worldpos.x;
       }
     } else {
       if (this.worldpos.x > maxX) {
-        maxX = x1;
+        maxX = this.worldpos.x;
       }
     }
+
+    if (this.worldpos.z < minZ) {
+      minZ = this.worldpos.z;
     }
-  })
+  },
+});
 
 //////////////// HIT BOUND ////////////////
 AFRAME.registerComponent("hit-bounds", {
@@ -268,24 +266,32 @@ AFRAME.registerComponent("hit-bounds", {
     if (this.el.object3D.position.z > z + margin) {
       this.el.object3D.position.z = z + margin;
       hitBound = z + margin + 1;
-      bound.setAttribute("position", elX + " " + y + " " + hitBound);
+      bound.object3D.position.x = elX;
+      bound.object3D.position.z = hitBound;
+      bound.components.sound.playSound();
     }
     if (this.el.object3D.position.z < minZ - margin) {
       this.el.object3D.position.z = minZ - margin;
       hitBound = minZ - margin - 1;
-      console.log("MINZ: " + minZ);
-      bound.setAttribute("position", elX + " " + y + " " + hitBound);
+      // console.log("MINZ: " + minZ);
+      bound.object3D.position.x = elX;
+      bound.object3D.position.z = hitBound;
+      bound.components.sound.playSound();
     }
     // limit X
     if (this.el.object3D.position.x > maxX + margin) {
       this.el.object3D.position.x = maxX + margin;
       hitBound = maxX + margin + 1;
-      bound.setAttribute("position", hitBound + " " + y + " " + elZ);
+      bound.object3D.position.x = hitBound;
+      bound.object3D.position.z = elZ;
+      bound.components.sound.playSound();
     }
     if (this.el.object3D.position.x < minX - margin) {
       this.el.object3D.position.x = minX - margin;
       hitBound = minX - margin - 1;
-      bound.setAttribute("position", hitBound + " " + y + " " + elZ);
+      bound.object3D.position.x = hitBound;
+      bound.object3D.position.z = elZ;
+      bound.components.sound.playSound();
     }
   },
 });
