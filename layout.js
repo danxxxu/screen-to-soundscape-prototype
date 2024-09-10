@@ -295,3 +295,12 @@ AFRAME.registerComponent("hit-bounds", {
     }
   },
 });
+
+ on(document.querySelector("#camera"),'collide',(e)=>{
+        const bound = document.querySelector("#bound");
+        if(e.detail.body.id === ball.body.id && !hit) {
+            hit = true
+
+           bound.components.sound.playSound();
+        }
+    })
