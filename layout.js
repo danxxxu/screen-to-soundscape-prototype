@@ -324,7 +324,7 @@ AFRAME.registerComponent("hit-bounds", {
 //////////////// COLLISION ////////////////
 AFRAME.registerComponent('foo', {
     init: function() {
-      this.el.addEventListener('collide', function(e) {
+      this.el.addEventListener('physicscollided', function(e) {
         console.log('Player has collided with ', e.detail.body.el);
       });
     }
