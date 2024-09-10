@@ -253,12 +253,12 @@ AFRAME.registerComponent("world-pos", {
 
 //////////////// HIT BOUND ////////////////
 let hit = false;
+const bound = document.querySelector("#bound");
 AFRAME.registerComponent("hit-bounds", {
   init: function () {
     // nothing here
   },
   tick: function () {
-    const bound = document.querySelector("#bound");
     let elX = this.el.object3D.position.x;
     let elZ = this.el.object3D.position.z;
     // console.log(elX);
@@ -270,7 +270,6 @@ AFRAME.registerComponent("hit-bounds", {
       bound.object3D.position.x = elX;
       bound.object3D.position.z = hitBound;
       if (!hit) {
-        bound.components.sound.playSound();
         hit = true;
       }
     }
@@ -280,7 +279,9 @@ AFRAME.registerComponent("hit-bounds", {
       // console.log("MINZ: " + minZ);
       bound.object3D.position.x = elX;
       bound.object3D.position.z = hitBound;
-      // bound.components.sound.playSound();
+      if (!hit) {
+        hit = true;
+      }
     }
     // limit X
     if (this.el.object3D.position.x > maxX + margin) {
@@ -288,6 +289,9 @@ AFRAME.registerComponent("hit-bounds", {
       hitBound = maxX + margin + 1;
       bound.object3D.position.x = hitBound;
       bound.object3D.position.z = elZ;
+      if (!hit) {
+        hit = true;
+      }
       // bound.components.sound.playSound();
     }
     if (this.el.object3D.position.x < minX - margin) {
@@ -295,7 +299,14 @@ AFRAME.registerComponent("hit-bounds", {
       hitBound = minX - margin - 1;
       bound.object3D.position.x = hitBound;
       bound.object3D.position.z = elZ;
+      if (!hit) {
+        hit = true;
+      }
       // bound.components.sound.playSound();
+    }
+
+    if (!hit) {
+      bound.components.sound.playSound();
     }
   },
 });
