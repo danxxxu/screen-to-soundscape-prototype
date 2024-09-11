@@ -29,7 +29,7 @@ let minX = 0,
   maxX = 0,
   minZ = 0;
 const margin = 2; //get boundaries
-let realWorldPos = new THREE.Vector3();
+// let realWorldPos = new THREE.Vector3();
 
 //////////////// LOAD AUDIO ////////////////
 function loadAudio(data) {
