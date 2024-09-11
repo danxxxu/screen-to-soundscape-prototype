@@ -13,10 +13,11 @@
         ></audio>
       </a-assets>
       <!--   add cursor     -->
-      <a-camera camera-listener hit-bounds foo>
+      <a-camera hit-bounds collide>
         <a-entity
           id="camera"
           cursor="fuse: true; fuseTimeout: 500"
+          position="0 0 -1"
           geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.02"
           material="color: black; shader: flat"
         >

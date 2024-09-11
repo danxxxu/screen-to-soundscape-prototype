@@ -322,10 +322,15 @@ AFRAME.registerComponent("hit-bounds", {
 });
 
 //////////////// COLLISION ////////////////
-AFRAME.registerComponent('foo', {
-    init: function() {
-      this.el.addEventListener('physicscollided', function(e) {
-        console.log('Player has collided with ', e.detail.body.el);
-      });
-    }
-  })
+AFRAME.registerComponent("collide", {
+  tick: function () {
+    let elX = this.el.object3D.position.x;
+    let elZ = this.el.object3D.position.z;
+    
+    sounds.forEach((s) => {
+      if(distance(elX, elZ, s.object3D.position.x, s.object3D.position.z) < 1) {
+        console.log(s.id);
+      }
+    })
+  },
+});
