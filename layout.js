@@ -328,7 +328,6 @@ function addComponents() {
       let elZ = this.el.object3D.position.z;
 
       sounds.forEach((s) => {
-        // console.log(s.object3D.position.x);
         if (
           distance(elX, elZ, s.object3D.position.x, s.object3D.position.z) < 1
         ) {
@@ -339,4 +338,5 @@ function addComponents() {
   });
   
   document.querySelector("[camera]").setAttribute("collide", "");
+  console.log(document.querySelector("[camera]"));
 }
