@@ -121,9 +121,7 @@ function drawLayout(data) {
     "bound-cue"
   );
 
-  // console.log("MAXX: " + maxX);
-  // console.log("MINX: " + minX);
-  // console.log("MINZ: " + minZ);
+  addComponents();
 }
 
 function iterateSection(x, y, z, d, section, ele, prename, angle) {
@@ -225,112 +223,120 @@ function checkAudio(audioArray) {
     console.log("stop");
   }
 }
+  //////////////// GET WORLD POS ////////////////
+  AFRAME.registerComponent("world-pos", {
+    init: function () {
+      this.worldpos = new THREE.Vector3();
+    },
+    update: function () {
+      this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
+      // console.log(this.worldpos);
+      if (this.worldpos.x < 0) {
+        if (this.worldpos.x < minX) {
+          minX = this.worldpos.x;
+        }
+      } else {
+        if (this.worldpos.x > maxX) {
+          maxX = this.worldpos.x;
+        }
+      }
 
-//////////////// GET WORLD POS ////////////////
-AFRAME.registerComponent("world-pos", {
-  init: function () {
-    this.worldpos = new THREE.Vector3();
-  },
-  update: function () {
-    this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
-    // console.log(this.worldpos);
-    if (this.worldpos.x < 0) {
-      if (this.worldpos.x < minX) {
-        minX = this.worldpos.x;
+      if (this.worldpos.z < minZ) {
+        minZ = this.worldpos.z;
       }
-    } else {
-      if (this.worldpos.x > maxX) {
-        maxX = this.worldpos.x;
-      }
-    }
+    },
+  });
 
-    if (this.worldpos.z < minZ) {
-      minZ = this.worldpos.z;
-    }
-  },
-});
+  //////////////// HIT BOUND ////////////////
+  let hit = false;
+  AFRAME.registerComponent("hit-bounds", {
+    init: function () {
+      // nothing here
+    },
+    tick: function () {
+      const bound = document.querySelector("#bound");
+      let elX = this.el.object3D.position.x;
+      let elZ = this.el.object3D.position.z;
+      // console.log(elX);
+      let hitBound;
+      // limit Z
+      if (this.el.object3D.position.z > z0 + margin) {
+        this.el.object3D.position.z = z0 + margin;
+        hitBound = z0 + margin + 1;
+        bound.object3D.position.x = elX;
+        bound.object3D.position.z = hitBound;
+        if (!hit) {
+          hit = true;
+          bound.components.sound.playSound();
+          // console.log("hit" + this.el.object3D.position.z);
+        }
+      }
+      if (this.el.object3D.position.z < minZ - margin) {
+        this.el.object3D.position.z = minZ - margin;
+        hitBound = minZ - margin - 1;
+        // console.log("MINZ: " + minZ);
+        bound.object3D.position.x = elX;
+        bound.object3D.position.z = hitBound;
+        if (!hit) {
+          hit = true;
+          bound.components.sound.playSound();
+          console.log("hit");
+        }
+      }
+      // limit X
+      if (this.el.object3D.position.x > maxX + margin) {
+        this.el.object3D.position.x = maxX + margin;
+        hitBound = maxX + margin + 1;
+        bound.object3D.position.x = hitBound;
+        bound.object3D.position.z = elZ;
+        if (!hit) {
+          hit = true;
+          bound.components.sound.playSound();
+          console.log("hit");
+        }
+      }
+      if (this.el.object3D.position.x < minX - margin) {
+        this.el.object3D.position.x = minX - margin;
+        hitBound = minX - margin - 1;
+        bound.object3D.position.x = hitBound;
+        bound.object3D.position.z = elZ;
+        if (!hit) {
+          hit = true;
+          bound.components.sound.playSound();
+          console.log("hit");
+        }
+      }
 
-//////////////// HIT BOUND ////////////////
-let hit = false;
-AFRAME.registerComponent("hit-bounds", {
-  init: function () {
-    // nothing here
-  },
-  tick: function () {
-    const bound = document.querySelector("#bound");
-    let elX = this.el.object3D.position.x;
-    let elZ = this.el.object3D.position.z;
-    // console.log(elX);
-    let hitBound;
-    // limit Z
-    if (this.el.object3D.position.z > z0 + margin) {
-      this.el.object3D.position.z = z0 + margin;
-      hitBound = z0 + margin + 1;
-      bound.object3D.position.x = elX;
-      bound.object3D.position.z = hitBound;
-      if (!hit) {
-        hit = true;
-        bound.components.sound.playSound();
-        // console.log("hit" + this.el.object3D.position.z);
+      if (
+        this.el.object3D.position.x > minX - margin &&
+        this.el.object3D.position.x < maxX + margin &&
+        this.el.object3D.position.z > minZ - margin &&
+        this.el.object3D.position.z < z0 + margin
+      ) {
+        hit = false;
       }
-    }
-    if (this.el.object3D.position.z < minZ - margin) {
-      this.el.object3D.position.z = minZ - margin;
-      hitBound = minZ - margin - 1;
-      // console.log("MINZ: " + minZ);
-      bound.object3D.position.x = elX;
-      bound.object3D.position.z = hitBound;
-      if (!hit) {
-        hit = true;
-        bound.components.sound.playSound();
-        console.log("hit");
-      }
-    }
-    // limit X
-    if (this.el.object3D.position.x > maxX + margin) {
-      this.el.object3D.position.x = maxX + margin;
-      hitBound = maxX + margin + 1;
-      bound.object3D.position.x = hitBound;
-      bound.object3D.position.z = elZ;
-      if (!hit) {
-        hit = true;
-        bound.components.sound.playSound();
-        console.log("hit");
-      }
-    }
-    if (this.el.object3D.position.x < minX - margin) {
-      this.el.object3D.position.x = minX - margin;
-      hitBound = minX - margin - 1;
-      bound.object3D.position.x = hitBound;
-      bound.object3D.position.z = elZ;
-      if (!hit) {
-        hit = true;
-        bound.components.sound.playSound();
-        console.log("hit");
-      }
-    }
+    },
+  });
 
-    if (
-      this.el.object3D.position.x > minX - margin &&
-      this.el.object3D.position.x < maxX + margin &&
-      this.el.object3D.position.z > minZ - margin &&
-      this.el.object3D.position.z < z0 + margin
-    ) {
-      hit = false;
-    }
-  },
-});
+function addComponents() {
+  //////////////// COLLISION ////////////////
+  AFRAME.registerComponent("collide", {
+    init: function () {
+    },
+    tick: function () {
+      let elX = this.el.object3D.position.x;
+      let elZ = this.el.object3D.position.z;
 
-//////////////// COLLISION ////////////////
-AFRAME.registerComponent("collide", {
-  tick: function () {
-    let elX = this.el.object3D.position.x;
-    let elZ = this.el.object3D.position.z;
-    
-    sounds.forEach((s) => {
-      if(distance(elX, elZ, s.object3D.position.x, s.object3D.position.z) < 1) {
-        console.log(s.id);
-      }
-    })
-  },
-});
+      sounds.forEach((s) => {
+        // console.log(s.object3D.position.x);
+        if (
+          distance(elX, elZ, s.object3D.position.x, s.object3D.position.z) < 1
+        ) {
+          console.log(s.id);
+        }
+      });
+    },
+  });
+  
+  document.querySelector("[camera]").setAttribute("collide", "");
+}
