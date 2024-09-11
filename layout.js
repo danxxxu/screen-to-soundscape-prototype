@@ -87,7 +87,8 @@ function drawLayout(data) {
     "#EF2D5E",
     "title",
     "title",
-    src
+    src,
+    true
   );
 
   // intro element; pink
@@ -100,7 +101,8 @@ function drawLayout(data) {
     "#EF2D5E",
     "intro",
     "intro",
-    src
+    src,
+    true
   );
 
   // sections
@@ -118,7 +120,8 @@ function drawLayout(data) {
     "#F0FFFF",
     "sound-cues",
     "bound",
-    "bound-cue"
+    "bound-cue",
+    false
   );
 }
 
@@ -139,7 +142,17 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
     const z1 = 0 - d / 2 - d * Math.sin(deg * i + angle);
     const id = key + i;
     const classH = "header";
-    const el = createElement(ele, x1, y, z1, "#00FFFF", classH, id, header);
+    const el = createElement(
+      ele,
+      x1,
+      y,
+      z1,
+      "#00FFFF",
+      classH,
+      id,
+      header,
+      true
+    );
     // realWorldPos.setFromMatrixPosition(el.object3D.matrixWorld);
     // el.object3D.getWorldPosition(realWorldPos);
     // console.log(realWorldPos.setFromMatrixPosition(el.object3D.matrixWorld));
@@ -151,7 +164,7 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
       const nameP = name + "_P";
       const xp = 0 - dp * Math.cos(deg * i + angle);
       const zp = 0 - dp * Math.sin(deg * i + angle);
-      createElement(el, xp, y, zp, "#FFFF00", classP, idP, nameP);
+      createElement(el, xp, y, zp, "#FFFF00", classP, idP, nameP, true);
     }
 
     // iterate subsections
@@ -173,7 +186,7 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
   }
 }
 
-function createElement(ele, x, y, z, col, c, id, s) {
+function createElement(ele, x, y, z, col, c, id, s, collide) {
   const sphereEl = document.createElement("a-sphere");
   sphereEl.setAttribute("color", col);
   sphereEl.setAttribute("shader", "flat");
@@ -181,9 +194,11 @@ function createElement(ele, x, y, z, col, c, id, s) {
   sphereEl.setAttribute("position", x + " " + y + " " + z);
   sphereEl.setAttribute("class", c);
   sphereEl.setAttribute("id", id);
-  sphereEl.setAttribute("sound", "src:#" + s);
+  sphereEl.setAttribute("sound", "src:#" + s + "; loop: true");
   sphereEl.setAttribute("world-pos", "");
-  sphereEl.setAttribute("collide", "");
+  if (collide) {
+    sphereEl.setAttribute("collide", "");
+  }
   // sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true");
   // console.log(x);
   // console.log(z);
@@ -312,33 +327,14 @@ AFRAME.registerComponent("hit-bounds", {
       this.el.object3D.position.z > minZ - margin &&
       this.el.object3D.position.z < z0 + margin
     ) {
+      if (hit) {
+        bound.components.sound.stopSound();
+      }
       hit = false;
     }
   },
 });
 
-// function addComponents() {
-//   //////////////// COLLISION ////////////////
-//   AFRAME.registerComponent("collide", {
-//     init: function () {
-//     },
-//     tick: function () {
-//       let elX = this.el.object3D.position.x;
-//       let elZ = this.el.object3D.position.z;
-
-//       sounds.forEach((s) => {
-//         if (
-//           distance(elX, elZ, s.object3D.position.x, s.object3D.position.z) < 1
-//         ) {
-//           console.log(s.id);
-//         }
-//       });
-//     },
-//   });
-
-//   document.querySelector("[camera]").setAttribute("collide", "");
-//   console.log(document.querySelector("[camera]"));
-// }
 
 AFRAME.registerComponent("collide", {
   init: function () {
@@ -352,7 +348,7 @@ AFRAME.registerComponent("collide", {
     this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
 
     if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < 1) {
-      console.log(this.el);
+      console.log(this.el.id);
     }
   },
 });
