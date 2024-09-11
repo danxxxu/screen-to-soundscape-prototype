@@ -29,7 +29,6 @@ let minX = 0,
   maxX = 0,
   minZ = 0;
 const margin = 2; //get boundaries
-// let realWorldPos = new THREE.Vector3();
 
 //////////////// LOAD AUDIO ////////////////
 function loadAudio(data) {
@@ -153,9 +152,6 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
       header,
       true
     );
-    // realWorldPos.setFromMatrixPosition(el.object3D.matrixWorld);
-    // el.object3D.getWorldPosition(realWorldPos);
-    // console.log(realWorldPos.setFromMatrixPosition(el.object3D.matrixWorld));
 
     //       load p; yellow color
     if (section[key].P != "") {
@@ -199,7 +195,6 @@ function createElement(ele, x, y, z, col, c, id, s, collide) {
   if (collide) {
     sphereEl.setAttribute("collide", "");
   }
-  // sphereEl.setAttribute("sound", "src:#" + s + "; autoplay: true");
   // console.log(x);
   // console.log(z);
   // console.log(s);
