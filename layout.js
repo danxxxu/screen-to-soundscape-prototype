@@ -341,20 +341,18 @@ AFRAME.registerComponent("hit-bounds", {
 // }
 
 AFRAME.registerComponent("collide", {
-  init: function () {},
+  init: function () {
+    this.worldpos = new THREE.Vector3();
+  },
   tick: function () {
     // const cameraEl = this.el.sceneEl.camera.el;
     const cameraEl = document.querySelector("[camera]");
     let camX = cameraEl.object3D.position.x;
     let camZ = cameraEl.object3D.position.z;
-    let elX = this.el.object3D.position.x;
-    let elZ = this.el.object3D.position.z;
-    
-    // console.log(camZ);
+    this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
 
-    if (distance(camX, camZ, elX, elZ) < 1) {
-      console.log("camera: " + camZ);
-      console.log("object: " + elZ);
+    if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < 1) {
+      console.log(this.el);
     }
   },
 });
