@@ -87,6 +87,7 @@ function drawLayout(data) {
     "title",
     "title",
     src,
+    true,
     true
   );
 
@@ -101,6 +102,7 @@ function drawLayout(data) {
     "intro",
     "intro",
     src,
+    true,
     true
   );
 
@@ -120,6 +122,7 @@ function drawLayout(data) {
     "sound-cues",
     "bound",
     "bound-cue",
+    false,
     false
   );
 }
@@ -150,6 +153,7 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
       classH,
       id,
       header,
+      true,
       true
     );
 
@@ -160,7 +164,7 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
       const nameP = name + "_P";
       const xp = 0 - dp * Math.cos(deg * i + angle);
       const zp = 0 - dp * Math.sin(deg * i + angle);
-      createElement(el, xp, y, zp, "#FFFF00", classP, idP, nameP, true);
+      createElement(el, xp, y, zp, "#FFFF00", classP, idP, nameP, true, true);
     }
 
     // iterate subsections
@@ -182,7 +186,7 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
   }
 }
 
-function createElement(ele, x, y, z, col, c, id, s, collide) {
+function createElement(ele, x, y, z, col, c, id, s, collide, auto) {
   const sphereEl = document.createElement("a-sphere");
   sphereEl.setAttribute("color", col);
   sphereEl.setAttribute("shader", "flat");
@@ -190,7 +194,14 @@ function createElement(ele, x, y, z, col, c, id, s, collide) {
   sphereEl.setAttribute("position", x + " " + y + " " + z);
   sphereEl.setAttribute("class", c);
   sphereEl.setAttribute("id", id);
-  sphereEl.setAttribute("sound", "src:#" + s + "; loop: true");
+  if (auto) {
+    sphereEl.setAttribute(
+      "sound",
+      "src:#" + s + "; autoplay: true; loop: true"
+    );
+  } else {
+    sphereEl.setAttribute("sound", "src:#" + s + "; loop: true");
+  }
   sphereEl.setAttribute("world-pos", "");
   if (collide) {
     sphereEl.setAttribute("collide", "");
@@ -209,13 +220,13 @@ function distance(x1, z1, x2, z2) {
 
 //////////////// PLAY AUDIO ////////////////
 let playing = false;
-document.addEventListener("keyup", (event) => {
-  if (event.code === "Space") {
-    // console.log(event.code);
-    checkAudio(sounds);
-    // console.log(sounds);
-  }
-});
+// document.addEventListener("keyup", (event) => {
+//   if (event.code === "Space") {
+//     // console.log(event.code);
+//     checkAudio(sounds);
+//     // console.log(sounds);
+//   }
+// });
 
 function checkAudio(audioArray) {
   if (!playing) {
@@ -330,7 +341,7 @@ AFRAME.registerComponent("hit-bounds", {
   },
 });
 
-
+let pause = false;
 AFRAME.registerComponent("collide", {
   init: function () {
     this.worldpos = new THREE.Vector3();
@@ -343,7 +354,20 @@ AFRAME.registerComponent("collide", {
     this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
 
     if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < 1) {
-      console.log(this.el.id);
+      // console.log(this.el.id);
+      if (!pause) {
+        sounds.forEach((s) => {
+          if (s != this.el) {
+            s.components.sound.pauseSound();
+          }
+        });
+        pause = true;
+      }
+    } else {
+      if (pause) {
+        checkAudio(sounds);
+      }
+      pause = false;
     }
   },
 });
