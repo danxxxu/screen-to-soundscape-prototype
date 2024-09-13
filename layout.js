@@ -221,7 +221,7 @@ function createElement(ele, x, y, z, col, c, id, s, collide, auto) {
   if (auto) {
     sphereEl.setAttribute(
       "sound",
-      "src:#" + s + "; autoplay: true; loop: true; distanceModel: exponential; rolloffFactor: 5"
+      "src:#" + s + "; autoplay: true; loop: true; distanceModel: exponential; rolloffFactor: 3; refDistance: 3"
     );
   } else {
     sphereEl.setAttribute("sound", "src:#" + s + "; rolloffFactor: 3");
