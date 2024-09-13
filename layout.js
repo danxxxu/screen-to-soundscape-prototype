@@ -111,6 +111,24 @@ function drawLayout(data) {
   // select elements after creation
   sounds = document.querySelectorAll("a-sphere");
   document.querySelector("[camera]").setAttribute("check-collide", "");
+  document.addEventListener("keyup", (event) => {
+    let playCount = 0;
+    let playEl;
+    if (event.code === "Space") {
+      sounds.forEach((s) => {
+        if(s.components.sound.isPlaying) {
+          playCount ++;
+          playEl = s;  
+        }
+      });
+      
+      if(playCount == 1) {
+        console.log(playEl.parentNode);
+        playEl.components.sound.pauseSound();
+        playEl.parentNode.components.sound.playSound();
+      }
+    }
+  });
 
   // create boundary sound object #F0FFFF ivory color
   //   console.log(minX);
@@ -394,9 +412,4 @@ AFRAME.registerComponent("check-collide", {
       });
     }
   },
-});
-
-document.addEventListener("keyup", (event) => {
-        if (event.code === "Space") {
-        }
 });
