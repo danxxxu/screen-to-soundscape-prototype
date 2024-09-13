@@ -32,7 +32,7 @@ let minX = 0,
   maxX = 0,
   minZ = 0;
 const margin = 2; //get boundaries
-const proxi = 1.5;
+const proxi = 2;
 
 //////////////// LOAD AUDIO ////////////////
 function loadAudio(data) {
@@ -413,15 +413,15 @@ AFRAME.registerComponent("collide", {
     let camZ = cameraEl.object3D.position.z;
     this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
 
-    if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
-      // console.log(this.el.id);
-      sounds.forEach((s) => {
-        if (s != this.el) {
-          s.components.sound.pauseSound();
-          // console.log(s.components.sound.isPlaying);
-        }
-      });
-    }
+    // if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
+    //   // console.log(this.el.id);
+    //   sounds.forEach((s) => {
+    //     if (s != this.el) {
+    //       s.components.sound.pauseSound();
+    //       // console.log(s.components.sound.isPlaying);
+    //     }
+    //   });
+    // }
   },
 });
 
@@ -434,23 +434,33 @@ AFRAME.registerComponent("check-collide", {
     let elX = this.el.object3D.position.x;
     let elZ = this.el.object3D.position.z;
     let colStatus = false;
+    let proxiEl;
 
     sounds.forEach((s) => {
       s.getObject3D("mesh").getWorldPosition(worldpos);
       // console.log(worldpos)
       if (distance(elX, elZ, worldpos.x, worldpos.z) < proxi) {
         colStatus = true;
+        proxiEl = s;
         if (!this.snapped) {
           this.el.object3D.position.x = worldpos.x;
           this.el.object3D.position.z = worldpos.z;
           setTimeout(() => {
             this.snapped = true;
             console.log(this.snapped);
-          }, 500);
+          }, 1000);
         }
       }
       // console.log(colStatus);
     });
+    
+    if(colStatus) {
+      sounds.forEach((s) => {
+        if(s!=proxiEl) {
+          s.components.sound.pauseSound();
+        }
+      })
+    }
 
     if (!colStatus) {
       this.snapped = false;
