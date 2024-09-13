@@ -110,6 +110,7 @@ function drawLayout(data) {
   iterateSection(x0, 0, z, d1, data.Sections, intro, "Sections_", 0);
   // select elements after creation
   sounds = document.querySelectorAll("a-sphere");
+  document.querySelector("[camera]").setAttribute("check-collide", "");
 
   // create boundary sound object #F0FFFF ivory color
   //   console.log(minX);
@@ -373,10 +374,15 @@ AFRAME.registerComponent("check-collide", {
 
     sounds.forEach((s) => {
       s.getObject3D("mesh").getWorldPosition(worldpos);
+      // console.log(worldpos)
       if (distance(elX, elZ, worldpos.x, worldpos.z) < 1) {
         colStatus = true;
       }
       console.log(colStatus);
     });
+    
+    if(!colStatus) {
+      checkAudio(sounds);
+    }
   },
 });
