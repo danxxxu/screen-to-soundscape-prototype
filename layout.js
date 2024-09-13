@@ -198,7 +198,7 @@ function createElement(ele, x, y, z, col, c, id, s, collide, auto) {
   if (auto) {
     sphereEl.setAttribute(
       "sound",
-      "src:#" + s + "; autoplay: true; loop: true"
+      "src:#" + s + "; autoplay: true; loop: true; rolloffFactor: 3"
     );
   } else {
     sphereEl.setAttribute("sound", "src:#" + s + "; loop: true");
@@ -220,7 +220,7 @@ function distance(x1, z1, x2, z2) {
 }
 
 //////////////// PLAY AUDIO ////////////////
-let playing = true;
+// let playing = true;
 // document.addEventListener("keyup", (event) => {
 //   if (event.code === "Space") {
 //     // console.log(event.code);
@@ -229,21 +229,21 @@ let playing = true;
 //   }
 // });
 
-function checkAudio(audioArray) {
-  if (!playing) {
-    audioArray.forEach((s) => {
-      s.components.sound.playSound();
-    });
-    playing = true;
-    console.log("play");
-  } else {
-    audioArray.forEach((s) => {
-      s.components.sound.pauseSound();
-    });
-    playing = false;
-    console.log("stop");
-  }
-}
+// function checkAudio(audioArray) {
+//   if (!playing) {
+//     audioArray.forEach((s) => {
+//       s.components.sound.playSound();
+//     });
+//     playing = true;
+//     console.log("play");
+//   } else {
+//     audioArray.forEach((s) => {
+//       s.components.sound.pauseSound();
+//     });
+//     playing = false;
+//     console.log("stop");
+//   }
+// }
 //////////////// GET WORLD POS ////////////////
 AFRAME.registerComponent("world-pos", {
   init: function () {
