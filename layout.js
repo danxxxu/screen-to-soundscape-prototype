@@ -123,7 +123,7 @@ function drawLayout(data) {
     "sound-cues",
     "bound",
     "bound-cue",
-    false,
+    true,
     false
   );
 }
@@ -220,7 +220,7 @@ function distance(x1, z1, x2, z2) {
 }
 
 //////////////// PLAY AUDIO ////////////////
-let playing = false;
+let playing = true;
 // document.addEventListener("keyup", (event) => {
 //   if (event.code === "Space") {
 //     // console.log(event.code);
@@ -358,6 +358,7 @@ AFRAME.registerComponent("collide", {
       sounds.forEach((s) => {
         if (s != this.el) {
           s.components.sound.pauseSound();
+          // console.log(s.components.sound.isPlaying);
         }
       });
     }
@@ -378,11 +379,16 @@ AFRAME.registerComponent("check-collide", {
       if (distance(elX, elZ, worldpos.x, worldpos.z) < 1) {
         colStatus = true;
       }
-      console.log(colStatus);
+      // console.log(colStatus);
     });
-    
-    if(!colStatus) {
-      checkAudio(sounds);
+
+    if (!colStatus) {
+      sounds.forEach((s) => {
+        if (!s.components.sound.isPlaying) {
+          s.components.sound.playSound();
+          // console.log(s.components.sound.isPlaying);
+        }
+      });
     }
   },
 });
