@@ -94,7 +94,7 @@ function drawLayout(data) {
     false,
     false
   );
-   const titleOpen = createElement(
+  const titleOpen = createElement(
     sceneEl,
     x0,
     y,
@@ -118,7 +118,17 @@ function drawLayout(data) {
     false,
     false
   );
-  
+  titleOpen.addEventListener("sound-ended", function () {
+    titleEl.components.sound.playSound();
+  });
+  titleEl.addEventListener("sound-ended", function () {
+    titleClose.components.sound.playSound();
+  });
+  titleClose.addEventListener("sound-ended", function () {
+    setTimeout(() => {
+      titleOpen.components.sound.playSound();
+    }, 1000);
+  });
 
   // intro element; pink
   src = data.Introduction.replace("mp3s\\", "").replace(".mp3", "");
@@ -249,7 +259,7 @@ function createElement(ele, x, y, z, col, c, id, s, collide, auto) {
       "sound",
       "src:#" +
         s +
-        "; autoplay: true; loop: true; distanceModel: exponential; rolloffFactor: 3; refDistance: 3"
+        "; autoplay: true; loop: false; distanceModel: exponential; rolloffFactor: 3; refDistance: 3"
     );
   } else {
     sphereEl.setAttribute("sound", "src:#" + s + "; rolloffFactor: 3");
@@ -436,7 +446,6 @@ AFRAME.registerComponent("collide", {
     // let camX = cameraEl.object3D.position.x;
     // let camZ = cameraEl.object3D.position.z;
     // this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
-
     // if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
     //   // console.log(this.el.id);
     //   sounds.forEach((s) => {
@@ -451,7 +460,7 @@ AFRAME.registerComponent("collide", {
 
 AFRAME.registerComponent("check-collide", {
   init: function () {
-        this.snapped = false;
+    this.snapped = false;
   },
   tick: function () {
     let worldpos = new THREE.Vector3();
@@ -477,13 +486,13 @@ AFRAME.registerComponent("check-collide", {
       }
       // console.log(colStatus);
     });
-    
-    if(colStatus) {
+
+    if (colStatus) {
       sounds.forEach((s) => {
-        if(s!=proxiEl) {
+        if (s != proxiEl) {
           s.components.sound.pauseSound();
         }
-      })
+      });
     }
 
     if (!colStatus) {
