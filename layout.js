@@ -198,10 +198,10 @@ function createElement(ele, x, y, z, col, c, id, s, collide, auto) {
   if (auto) {
     sphereEl.setAttribute(
       "sound",
-      "src:#" + s + "; autoplay: true; loop: true; rolloffFactor: 3"
+      "src:#" + s + "; autoplay: true; loop: true; rolloffFactor: 5"
     );
   } else {
-    sphereEl.setAttribute("sound", "src:#" + s + "; loop: true");
+    sphereEl.setAttribute("sound", "src:#" + s + "; loop: true; rolloffFactor: 5");
   }
   sphereEl.setAttribute("world-pos", "");
   if (collide) {
@@ -359,6 +359,12 @@ AFRAME.registerComponent("collide", {
         if (s != this.el) {
           s.components.sound.pauseSound();
           // console.log(s.components.sound.isPlaying);
+        }
+      });
+      
+      document.addEventListener("keyup", (event) => {
+        if (event.code === "Space") {
+          console.log(this.el);
         }
       });
     }
