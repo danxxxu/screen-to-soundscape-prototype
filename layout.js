@@ -91,9 +91,34 @@ function drawLayout(data) {
     "title",
     "title",
     src,
+    false,
+    false
+  );
+   const titleOpen = createElement(
+    sceneEl,
+    x0,
+    y,
+    z,
+    "#EF2D5E",
+    "title",
+    "title-open",
+    "header1-open",
     true,
     true
   );
+  const titleClose = createElement(
+    sceneEl,
+    x0,
+    y,
+    z,
+    "#EF2D5E",
+    "title",
+    "title-close",
+    "header1-close",
+    false,
+    false
+  );
+  
 
   // intro element; pink
   src = data.Introduction.replace("mp3s\\", "").replace(".mp3", "");
@@ -407,11 +432,10 @@ AFRAME.registerComponent("collide", {
     this.worldpos = new THREE.Vector3();
   },
   tick: function () {
-    // const cameraEl = this.el.sceneEl.camera.el;
-    const cameraEl = document.querySelector("[camera]");
-    let camX = cameraEl.object3D.position.x;
-    let camZ = cameraEl.object3D.position.z;
-    this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
+    // const cameraEl = document.querySelector("[camera]");
+    // let camX = cameraEl.object3D.position.x;
+    // let camZ = cameraEl.object3D.position.z;
+    // this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
 
     // if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
     //   // console.log(this.el.id);
