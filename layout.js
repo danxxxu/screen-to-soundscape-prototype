@@ -341,7 +341,6 @@ AFRAME.registerComponent("hit-bounds", {
   },
 });
 
-let pause = false;
 AFRAME.registerComponent("collide", {
   init: function () {
     this.worldpos = new THREE.Vector3();
@@ -355,19 +354,29 @@ AFRAME.registerComponent("collide", {
 
     if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < 1) {
       // console.log(this.el.id);
-      if (!pause) {
-        sounds.forEach((s) => {
-          if (s != this.el) {
-            s.components.sound.pauseSound();
-          }
-        });
-        pause = true;
-      }
-    } else {
-      if (pause) {
-        checkAudio(sounds);
-      }
-      pause = false;
+      sounds.forEach((s) => {
+        if (s != this.el) {
+          s.components.sound.pauseSound();
+        }
+      });
     }
+  },
+});
+
+AFRAME.registerComponent("check-collide", {
+  init: function () {},
+  tick: function () {
+    let worldpos = new THREE.Vector3();
+    let elX = this.el.object3D.position.x;
+    let elZ = this.el.object3D.position.z;
+    let colStatus = false;
+
+    sounds.forEach((s) => {
+      s.getObject3D("mesh").getWorldPosition(worldpos);
+      if (distance(elX, elZ, worldpos.x, worldpos.z) < 1) {
+        colStatus = true;
+      }
+      console.log(colStatus);
+    });
   },
 });
