@@ -16,9 +16,12 @@ fetchJSONData();
 const sceneEl = document.querySelector("a-scene");
 const assetEl = document.querySelector("a-assets");
 const y = 1.6;
-const d1 = 8; // header 2
-const d2 = 4; // header2 to header3
-const dp = 2; // header to p
+// const d1 = 8; // header 2
+// const d2 = 4; // header2 to header3
+// const dp = 2; // header to p
+const d1 = 10; // header 2
+const d2 = 6; // header2 to header3
+const dp = 4; // header to p
 let x0 = 0;
 let z = 0;
 let z0 = 0;
@@ -218,10 +221,10 @@ function createElement(ele, x, y, z, col, c, id, s, collide, auto) {
   if (auto) {
     sphereEl.setAttribute(
       "sound",
-      "src:#" + s + "; autoplay: true; loop: true; rolloffFactor: 5"
+      "src:#" + s + "; autoplay: true; loop: true; distanceModel: exponential; rolloffFactor: 5"
     );
   } else {
-    sphereEl.setAttribute("sound", "src:#" + s + "; rolloffFactor: 5");
+    sphereEl.setAttribute("sound", "src:#" + s + "; rolloffFactor: 3");
   }
   sphereEl.setAttribute("world-pos", "");
   if (collide) {
