@@ -112,25 +112,25 @@ function drawLayout(data) {
   sounds = document.querySelectorAll("a-sphere");
   document.querySelector("[camera]").setAttribute("check-collide", "");
 
-//   document.addEventListener("keyup", (event) => {
-//     let playCount = 0;
-//     let playEl;
-//     if (event.code === "Space") {
-//       document.querySelector("[camera]").removeAttribute("check-collide");
-//       sounds.forEach((s) => {
-//         if (s.components.sound.isPlaying) {
-//           playCount++;
-//           playEl = s;
-//         }
-//       });
+  //   document.addEventListener("keyup", (event) => {
+  //     let playCount = 0;
+  //     let playEl;
+  //     if (event.code === "Space") {
+  //       document.querySelector("[camera]").removeAttribute("check-collide");
+  //       sounds.forEach((s) => {
+  //         if (s.components.sound.isPlaying) {
+  //           playCount++;
+  //           playEl = s;
+  //         }
+  //       });
 
-//       if (playCount == 1) {
-//         playEl.components.sound.pauseSound();
-//         playEl.parentNode.components.sound.playSound();
-//         console.log(playEl.parentNode.components.sound.isPlaying);
-//       }
-//     }
-//   });
+  //       if (playCount == 1) {
+  //         playEl.components.sound.pauseSound();
+  //         playEl.parentNode.components.sound.playSound();
+  //         console.log(playEl.parentNode.components.sound.isPlaying);
+  //       }
+  //     }
+  //   });
 
   // create boundary sound object #F0FFFF ivory color
   //   console.log(minX);
@@ -221,10 +221,7 @@ function createElement(ele, x, y, z, col, c, id, s, collide, auto) {
       "src:#" + s + "; autoplay: true; loop: true; rolloffFactor: 5"
     );
   } else {
-    sphereEl.setAttribute(
-      "sound",
-      "src:#" + s + "; loop: true; rolloffFactor: 5"
-    );
+    sphereEl.setAttribute("sound", "src:#" + s + "; rolloffFactor: 5");
   }
   sphereEl.setAttribute("world-pos", "");
   if (collide) {
@@ -294,9 +291,7 @@ AFRAME.registerComponent("world-pos", {
 //////////////// HIT BOUND ////////////////
 let hit = false;
 AFRAME.registerComponent("hit-bounds", {
-  init: function () {
-    // nothing here
-  },
+  init: function () {},
   tick: function () {
     const bound = document.querySelector("#bound");
     let elX = this.el.object3D.position.x;
@@ -304,9 +299,12 @@ AFRAME.registerComponent("hit-bounds", {
     // console.log(elX);
     let hitBound;
     // limit Z
-    if (this.el.object3D.position.z > z0 + margin) {
+    if (
+      this.el.object3D.position.z > z0 + margin ||
+      this.el.object3D.position.z == z0 + margin
+    ) {
       this.el.object3D.position.z = z0 + margin;
-      hitBound = z0 + margin + 1;
+      hitBound = z0 + margin + 0.5;
       bound.object3D.position.x = elX;
       bound.object3D.position.z = hitBound;
       if (!hit) {
@@ -314,10 +312,18 @@ AFRAME.registerComponent("hit-bounds", {
         bound.components.sound.playSound();
         // console.log("hit" + this.el.object3D.position.z);
       }
+      document.addEventListener("keydown", (event) => {
+        if (event.code === "ArrowDown") {
+          bound.components.sound.playSound();
+        }
+      });
     }
-    if (this.el.object3D.position.z < minZ - margin) {
+    if (
+      this.el.object3D.position.z < minZ - margin ||
+      this.el.object3D.position.z == minZ - margin
+    ) {
       this.el.object3D.position.z = minZ - margin;
-      hitBound = minZ - margin - 1;
+      hitBound = minZ - margin - 0.5;
       // console.log("MINZ: " + minZ);
       bound.object3D.position.x = elX;
       bound.object3D.position.z = hitBound;
@@ -326,11 +332,19 @@ AFRAME.registerComponent("hit-bounds", {
         bound.components.sound.playSound();
         console.log("hit");
       }
+      document.addEventListener("keydown", (event) => {
+        if (event.code === "ArrowUp") {
+          bound.components.sound.playSound();
+        }
+      });
     }
     // limit X
-    if (this.el.object3D.position.x > maxX + margin) {
+    if (
+      this.el.object3D.position.x > maxX + margin ||
+      this.el.object3D.position.x == maxX + margin
+    ) {
       this.el.object3D.position.x = maxX + margin;
-      hitBound = maxX + margin + 1;
+      hitBound = maxX + margin + 0.5;
       bound.object3D.position.x = hitBound;
       bound.object3D.position.z = elZ;
       if (!hit) {
@@ -338,10 +352,18 @@ AFRAME.registerComponent("hit-bounds", {
         bound.components.sound.playSound();
         console.log("hit");
       }
+      document.addEventListener("keydown", (event) => {
+        if (event.code === "ArrowRight") {
+          bound.components.sound.playSound();
+        }
+      });
     }
-    if (this.el.object3D.position.x < minX - margin) {
+    if (
+      this.el.object3D.position.x < minX - margin ||
+      this.el.object3D.position.x == minX - margin
+    ) {
       this.el.object3D.position.x = minX - margin;
-      hitBound = minX - margin - 1;
+      hitBound = minX - margin - 0.5;
       bound.object3D.position.x = hitBound;
       bound.object3D.position.z = elZ;
       if (!hit) {
@@ -349,6 +371,11 @@ AFRAME.registerComponent("hit-bounds", {
         bound.components.sound.playSound();
         console.log("hit");
       }
+      document.addEventListener("keydown", (event) => {
+        if (event.code === "ArrowLeft") {
+          bound.components.sound.playSound();
+        }
+      });
     }
 
     if (
