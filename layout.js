@@ -123,7 +123,7 @@ function drawLayout(data) {
     "sound-cues",
     "bound",
     "bound-cue",
-    true,
+    false,
     false
   );
 }
