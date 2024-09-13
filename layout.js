@@ -111,6 +111,7 @@ function drawLayout(data) {
   // select elements after creation
   sounds = document.querySelectorAll("a-sphere");
   document.querySelector("[camera]").setAttribute("check-collide", "");
+  
   document.addEventListener("keyup", (event) => {
     let playCount = 0;
     let playEl;
@@ -123,9 +124,9 @@ function drawLayout(data) {
       });
       
       if(playCount == 1) {
-        console.log(playEl.parentNode);
         playEl.components.sound.pauseSound();
         playEl.parentNode.components.sound.playSound();
+        console.log(playEl.parentNode.components.sound.isPlaying);
       }
     }
   });
