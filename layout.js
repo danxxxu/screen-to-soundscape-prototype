@@ -32,6 +32,7 @@ let minX = 0,
   maxX = 0,
   minZ = 0;
 const margin = 2; //get boundaries
+const proxi = 1.5;
 
 //////////////// LOAD AUDIO ////////////////
 function loadAudio(data) {
@@ -221,7 +222,9 @@ function createElement(ele, x, y, z, col, c, id, s, collide, auto) {
   if (auto) {
     sphereEl.setAttribute(
       "sound",
-      "src:#" + s + "; autoplay: true; loop: true; distanceModel: exponential; rolloffFactor: 3; refDistance: 3"
+      "src:#" +
+        s +
+        "; autoplay: true; loop: true; distanceModel: exponential; rolloffFactor: 3; refDistance: 3"
     );
   } else {
     sphereEl.setAttribute("sound", "src:#" + s + "; rolloffFactor: 3");
@@ -317,6 +320,7 @@ AFRAME.registerComponent("hit-bounds", {
       }
       document.addEventListener("keydown", (event) => {
         if (event.code === "ArrowDown") {
+          hit = true;
           bound.components.sound.playSound();
         }
       });
@@ -337,6 +341,7 @@ AFRAME.registerComponent("hit-bounds", {
       }
       document.addEventListener("keydown", (event) => {
         if (event.code === "ArrowUp") {
+          hit = true;
           bound.components.sound.playSound();
         }
       });
@@ -357,6 +362,7 @@ AFRAME.registerComponent("hit-bounds", {
       }
       document.addEventListener("keydown", (event) => {
         if (event.code === "ArrowRight") {
+          hit = true;
           bound.components.sound.playSound();
         }
       });
@@ -376,6 +382,7 @@ AFRAME.registerComponent("hit-bounds", {
       }
       document.addEventListener("keydown", (event) => {
         if (event.code === "ArrowLeft") {
+          hit = true;
           bound.components.sound.playSound();
         }
       });
@@ -406,7 +413,7 @@ AFRAME.registerComponent("collide", {
     let camZ = cameraEl.object3D.position.z;
     this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
 
-    if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < 1) {
+    if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
       // console.log(this.el.id);
       sounds.forEach((s) => {
         if (s != this.el) {
@@ -429,8 +436,10 @@ AFRAME.registerComponent("check-collide", {
     sounds.forEach((s) => {
       s.getObject3D("mesh").getWorldPosition(worldpos);
       // console.log(worldpos)
-      if (distance(elX, elZ, worldpos.x, worldpos.z) < 1) {
+      if (distance(elX, elZ, worldpos.x, worldpos.z) < proxi) {
         colStatus = true;
+        // this.el.object3D.position.x = worldpos.x;
+        // this.el.object3D.position.z = worldpos.z;
       }
       // console.log(colStatus);
     });
