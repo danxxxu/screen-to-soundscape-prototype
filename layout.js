@@ -201,7 +201,10 @@ function createElement(ele, x, y, z, col, c, id, s, collide, auto) {
       "src:#" + s + "; autoplay: true; loop: true; rolloffFactor: 5"
     );
   } else {
-    sphereEl.setAttribute("sound", "src:#" + s + "; loop: true; rolloffFactor: 5");
+    sphereEl.setAttribute(
+      "sound",
+      "src:#" + s + "; loop: true; rolloffFactor: 5"
+    );
   }
   sphereEl.setAttribute("world-pos", "");
   if (collide) {
@@ -361,12 +364,6 @@ AFRAME.registerComponent("collide", {
           // console.log(s.components.sound.isPlaying);
         }
       });
-      
-      document.addEventListener("keyup", (event) => {
-        if (event.code === "Space") {
-          console.log(this.el);
-        }
-      });
     }
   },
 });
@@ -397,4 +394,9 @@ AFRAME.registerComponent("check-collide", {
       });
     }
   },
+});
+
+document.addEventListener("keyup", (event) => {
+        if (event.code === "Space") {
+        }
 });
