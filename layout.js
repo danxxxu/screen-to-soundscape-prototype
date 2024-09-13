@@ -426,7 +426,9 @@ AFRAME.registerComponent("collide", {
 });
 
 AFRAME.registerComponent("check-collide", {
-  init: function () {},
+  init: function () {
+    this.snapped = false;
+  },
   tick: function () {
     let worldpos = new THREE.Vector3();
     let elX = this.el.object3D.position.x;
@@ -438,9 +440,18 @@ AFRAME.registerComponent("check-collide", {
       // console.log(worldpos)
       if (distance(elX, elZ, worldpos.x, worldpos.z) < proxi) {
         colStatus = true;
-        // this.el.object3D.position.x = worldpos.x;
-        // this.el.object3D.position.z = worldpos.z;
+        if (!this.snapped) {
+          this.el.object3D.position.x = worldpos.x;
+          this.el.object3D.position.z = worldpos.z;
+          this.snapped = true;
+        }
       }
+      setTimeout(() => {
+        if (this.snapped) {
+          this.snapped = false;
+          console.log(this.snapped);
+        }
+      }, 1000);
       // console.log(colStatus);
     });
 
