@@ -427,7 +427,7 @@ AFRAME.registerComponent("collide", {
 
 AFRAME.registerComponent("check-collide", {
   init: function () {
-    this.snapped = false;
+        this.snapped = false;
   },
   tick: function () {
     let worldpos = new THREE.Vector3();
@@ -443,19 +443,17 @@ AFRAME.registerComponent("check-collide", {
         if (!this.snapped) {
           this.el.object3D.position.x = worldpos.x;
           this.el.object3D.position.z = worldpos.z;
-          this.snapped = true;
+          setTimeout(() => {
+            this.snapped = true;
+            console.log(this.snapped);
+          }, 500);
         }
       }
-      setTimeout(() => {
-        if (this.snapped) {
-          this.snapped = false;
-          console.log(this.snapped);
-        }
-      }, 1000);
       // console.log(colStatus);
     });
 
     if (!colStatus) {
+      this.snapped = false;
       sounds.forEach((s) => {
         if (!s.components.sound.isPlaying) {
           s.components.sound.playSound();
