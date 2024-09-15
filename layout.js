@@ -75,136 +75,82 @@ function createAudio(name) {
   assetEl.appendChild(audioEl);
 }
 
-//////////////// DRAW LAYOUT ////////////////
+//////////////// DRAW LAYOUT ///////////////////
+// Handles the creation of visual and interactive elements in the scene
 function drawLayout(data) {
-  // console.log(data);
+  // Create title element (pink)
+  z = -d1;
+  const titleEl = createElement(sceneEl, x0, y, z, "#EF2D5E", "title", "title", data.Title.audio_path.replace("mp3s\\", "").replace(".mp3", ""), true, true);
 
-  // title element; pink
-  z = z - d1;
-  src = data.Title.audio_path.replace("mp3s\\", "").replace(".mp3", "");
-  createElement(x0, y, z, "#EF2D5E", "title", "title", src, false, false);
+  // Create introduction element (pink)
+  const introEl = createElement(titleEl, x0, 0, z, "#EF2D5E", "intro", "intro", data.Introduction.audio_path.replace("mp3s\\", "").replace(".mp3", ""), true, true);
 
-  // intro element; pink
-  z = z - d1;
-  src = data.Introduction.audio_path.replace("mp3s\\", "").replace(".mp3", "");
-  createElement(x0, y, z, "#EF2D5E", "intro", "intro", src, true, true);
+  // Recursively create sections and subsections
+  iterateSection(x0, 0, z, d1, data.Sections, introEl, "Sections_", 0);
 
-  // sections
-  z = z - d1;
-  iterateSection(x0, y, z, d1, data.Sections, "Sections_", 0);
-  // select elements after creation
+  // Add sound collision detection and boundary
   sounds = document.querySelectorAll("a-sphere");
   document.querySelector("[camera]").setAttribute("check-collide", "");
 
-  //   document.addEventListener("keyup", (event) => {
-  //     let playCount = 0;
-  //     let playEl;
-  //     if (event.code === "Space") {
-  //       document.querySelector("[camera]").removeAttribute("check-collide");
-  //       sounds.forEach((s) => {
-  //         if (s.components.sound.isPlaying) {
-  //           playCount++;
-  //           playEl = s;
-  //         }
-  //       });
-
-  //       if (playCount == 1) {
-  //         playEl.components.sound.pauseSound();
-  //         playEl.parentNode.components.sound.playSound();
-  //         console.log(playEl.parentNode.components.sound.isPlaying);
-  //       }
-  //     }
-  //   });
-
-  // create boundary sound object #F0FFFF ivory color
-  //   console.log(minX);
-  createElement(
-    minX - margin,
-    y,
-    z0 + margin,
-    "#F0FFFF",
-    "sound-cues",
-    "bound",
-    "bound-cue",
-    false,
-    false
-  );
+  // Create boundary sound object (ivory color)
+  createElement(sceneEl, minX - margin, y, z0 + margin, "#F0FFFF", "sound-cues", "bound", "bound-cue", false, false);
 }
 
-function iterateSection(x, y, z, d, section, prename, angle) {
-  const num = Object.keys(section).length;
-  if (num == 1) {
-    deg = Math.PI / 2;
-  } else {
-    deg = Math.PI / (num - 1);
-  }
-  let i = 0;
-  for (const key in section) {
-    // console.log(section[key]);
-    //     header only; blue color
+// Recursively iterates through sections, creating header and paragraph elements
+function iterateSection(x, y, z, d, section, parentEl, prename, angle) {
+  const numSections = Object.keys(section).length;
+  const degStep = numSections === 1 ? Math.PI / 2 : Math.PI / (numSections - 1);
+
+  Object.keys(section).forEach((key, i) => {
     const name = prename + key.replace(":", "").replaceAll(" ", "_");
-    const header = name + "_header";
-    const x1 = x - d * Math.cos(deg * i + angle);
-    const z1 = z - d / 2 - d * Math.sin(deg * i + angle);
-    const id = key + i;
-    const classH = "header";
-    createElement(x1, y, z1, "#00FFFF", classH, id, header, true, true);
+    const headerName = section[key].audio_path.replace("mp3s\\", "").replace(".mp3", "");
 
-    //       load p; yellow color
-    if (section[key].P != "") {
-      const idP = id + "_p";
-      const classP = "p";
-      const nameP = name + "_P";
-      const xp = x - dp * Math.cos(deg * i + angle);
-      const zp = z - dp * Math.sin(deg * i + angle);
-      createElement(xp, y, zp, "#FFFF00", classP, idP, nameP, true, true);
+    // Calculate position for the section
+    const x1 = -d * Math.cos(degStep * i + angle);
+    const z1 = -d / 2 - d * Math.sin(degStep * i + angle);
+
+    // Create header element (blue)
+    const headerEl = createElement(parentEl, x1, y, z1, "#00FFFF", "header", `${key}${i}`, headerName, true, true);
+
+    // If paragraph exists, create it (yellow)
+    if (section[key].P) {
+      const xp = -dp * Math.cos(degStep * i + angle);
+      const zp = -dp * Math.sin(degStep * i + angle);
+      createElement(headerEl, xp, y, zp, "#FFFF00", "p", `${key}${i}_p`, section[key].P.audio_path.replace("mp3s\\", "").replace(".mp3", ""), true, true);
     }
 
-    // iterate subsections
+    // Recursively handle subsections
     if (section[key].Subsections) {
-      // console.log(key);
-      iterateSection(
-        x1,
-        y,
-        z1,
-        d2,
-        section[key].Subsections,
-        name + "_Subsections_",
-        0
-        // deg * i - 0.5 * Math.PI
-      );
+      iterateSection(x1, y, z1, d2, section[key].Subsections, headerEl, name + "_Subsections_", 0);
     }
-    i++;
-  }
+  });
 }
 
-function createElement(x, y, z, col, c, id, s, collide, auto) {
+// Helper function to create a visual element (sphere) in the scene
+function createElement(parentEl, x, y, z, color, className, id, soundId, collide, autoPlay) {
   const sphereEl = document.createElement("a-sphere");
-  sphereEl.setAttribute("color", col);
+
+  // Set attributes for the sphere element
+  sphereEl.setAttribute("color", color);
   sphereEl.setAttribute("shader", "flat");
   sphereEl.setAttribute("radius", "0.5");
-  sphereEl.setAttribute("position", x + " " + y + " " + z);
-  sphereEl.setAttribute("class", c);
+  sphereEl.setAttribute("position", `${x} ${y} ${z}`);
+  sphereEl.setAttribute("class", className);
   sphereEl.setAttribute("id", id);
-  if (auto) {
-    sphereEl.setAttribute(
-      "sound",
-      "src:#" +
-        s +
-        "; autoplay: true; loop: false; distanceModel: exponential; rolloffFactor: 3; refDistance: 3"
-    );
-  } else {
-    sphereEl.setAttribute("sound", "src:#" + s + "; rolloffFactor: 3");
-  }
-  sphereEl.setAttribute("world-pos", "");
+
+  // Set sound attributes
+  const soundSrc = `src:#${soundId}; rolloffFactor: 3`;
+  sphereEl.setAttribute("sound", autoPlay ? `${soundSrc}; autoplay: true; loop: false; distanceModel: exponential; refDistance: 3` : soundSrc);
+
+  // Enable collision detection if required
   if (collide) {
     sphereEl.setAttribute("collide", "");
   }
-  // console.log(x);
-  // console.log(z);
-  // console.log(s);
 
-  sceneEl.appendChild(sphereEl);
+  // Append the created element to its parent
+  parentEl.appendChild(sphereEl);
+
+  return document.getElementById(id); // Return the created element
 }
 
 function distance(x1, z1, x2, z2) {
@@ -212,30 +158,31 @@ function distance(x1, z1, x2, z2) {
 }
 
 //////////////// PLAY AUDIO ////////////////
-// let playing = true;
-// document.addEventListener("keyup", (event) => {
-//   if (event.code === "Space") {
-//     // console.log(event.code);
-//     checkAudio(sounds);
-//     // console.log(sounds);
-//   }
-// });
+let playing = true;
+document.addEventListener("keyup", (event) => {
+  if (event.code === "Space") {
+    // console.log(event.code);
+    checkAudio(sounds);
+    // console.log(sounds);
+  }
+});
 
-// function checkAudio(audioArray) {
-//   if (!playing) {
-//     audioArray.forEach((s) => {
-//       s.components.sound.playSound();
-//     });
-//     playing = true;
-//     console.log("play");
-//   } else {
-//     audioArray.forEach((s) => {
-//       s.components.sound.pauseSound();
-//     });
-//     playing = false;
-//     console.log("stop");
-//   }
-// }
+function checkAudio(audioArray) {
+  if (!playing) {
+    audioArray.forEach((s) => {
+      s.components.sound.playSound();
+    });
+    playing = true;
+    console.log("play");
+  } else {
+    audioArray.forEach((s) => {
+      s.components.sound.pauseSound();
+    });
+    playing = false;
+    console.log("stop");
+  }
+}
+
 //////////////// GET WORLD POS ////////////////
 AFRAME.registerComponent("world-pos", {
   init: function () {
