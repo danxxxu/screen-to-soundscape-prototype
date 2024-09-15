@@ -90,7 +90,6 @@ function drawLayout(data) {
     "title",
     "title",
     data.Title.audio_path.replace("mp3s\\", "").replace(".mp3", ""),
-    true,
     true
   );
 
@@ -104,17 +103,16 @@ function drawLayout(data) {
     "intro",
     "intro",
     data.Introduction.audio_path.replace("mp3s\\", "").replace(".mp3", ""),
-    true,
     true
   );
 
   // Recursively create sections and subsections
   iterateSection(x0, 0, z, d1, data.Sections, introEl, "Sections_", 0);
 
-  console.log(minX);
-
   // Add sound collision detection and boundary
   sounds = document.querySelectorAll("a-sphere");
+  document.querySelector("[camera]").setAttribute("collide", "");
+
   document.querySelector("[camera]").setAttribute("play-proxi", "");
 
   document.addEventListener("keyup", (event) => {
@@ -137,7 +135,6 @@ function drawLayout(data) {
     "sound-cues",
     "bound",
     "bound-cue",
-    false,
     false
   );
 }
@@ -167,7 +164,6 @@ function iterateSection(x, y, z, d, section, parentEl, prename, angle) {
       "header",
       `${key}${i}`,
       headerName,
-      true,
       true
     );
 
@@ -184,7 +180,6 @@ function iterateSection(x, y, z, d, section, parentEl, prename, angle) {
         "p",
         `${key}${i}_p`,
         section[key].P.audio_path.replace("mp3s\\", "").replace(".mp3", ""),
-        true,
         true
       );
     }
@@ -215,7 +210,6 @@ function createElement(
   className,
   id,
   soundId,
-  collide,
   autoPlay
 ) {
   const sphereEl = document.createElement("a-sphere");
@@ -236,9 +230,8 @@ function createElement(
       ? `${soundSrc}; autoplay: true; loop: false; distanceModel: exponential; refDistance: 3`
       : soundSrc
   );
-  if (collide) {
+  if (autoPlay) {
     sphereEl.setAttribute("world-pos", "");
-    sphereEl.setAttribute("collide", "");
   }
 
   // Append the created element to its parent
@@ -408,21 +401,19 @@ AFRAME.registerComponent("collide", {
   tick: function () {
     let camX = this.el.object3D.position.x;
     let camZ = this.el.object3D.position.z;
-    this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
-    if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
-      // console.log(this.el.id);
-      if (!collide) {
-        this.el.components.sound.playSound();
-        collide = true;
-      }
-      sounds.forEach((s) => {
-        if (s != this.el) {
-          s.components.sound.pauseSound();
+
+    sounds.forEach((s) => {
+      s.getObject3D("mesh").getWorldPosition(this.worldpos);
+      if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
+        // console.log(this.el.id);
+        if (!collide) {
+          s.components.sound.playSound();
+          collide = true;
         }
-      });
-    } else {
-      collide = false;
-    }
+      } else {
+        s.components.sound.pauseSound();
+      }
+    });
   },
 });
 
