@@ -112,7 +112,6 @@ function drawLayout(data) {
   // Add sound collision detection and boundary
   sounds = document.querySelectorAll("a-sphere");
   document.querySelector("[camera]").setAttribute("collide", "");
-
   document.querySelector("[camera]").setAttribute("play-proxi", "");
 
   document.addEventListener("keyup", (event) => {
@@ -137,6 +136,8 @@ function drawLayout(data) {
     "bound-cue",
     false
   );
+  
+    document.querySelector("[camera]").setAttribute("hit-bounds", "");
 }
 
 // Recursively iterates through sections, creating header and paragraph elements
@@ -413,6 +414,10 @@ AFRAME.registerComponent("collide", {
       } else {
         s.components.sound.pauseSound();
       }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      collide = false;
     });
   },
 });
