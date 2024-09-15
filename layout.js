@@ -93,6 +93,7 @@ function drawLayout(data) {
     true
   );
 
+
   // Create introduction element (pink)
   const introEl = createElement(
     titleEl,
