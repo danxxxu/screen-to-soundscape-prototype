@@ -16,7 +16,7 @@ fetchJSONData();
 const sceneEl = document.querySelector("a-scene");
 const assetEl = document.querySelector("a-assets");
 const y = 1.6;
-const d1 = 10; // header 2
+const d1 = 8; // header 2
 const d2 = 8; // header2 to header3
 const dp = 6; // header to p
 let x0 = 0;
@@ -108,9 +108,12 @@ function drawLayout(data) {
   // Recursively create sections and subsections
   iterateSection(x0, 0, z, d1, data.Sections, introEl, "Sections_", 0);
 
+  console.log(minX);
+
   // Add sound collision detection and boundary
   sounds = document.querySelectorAll("a-sphere");
   document.querySelector("[camera]").setAttribute("check-collide", "");
+  document.querySelector("[camera]").setAttribute("play-proxi", "");
 
   document.addEventListener("keyup", (event) => {
     if (event.code === "Space") {
@@ -225,6 +228,10 @@ function createElement(
       ? `${soundSrc}; autoplay: true; loop: false; distanceModel: exponential; refDistance: 3`
       : soundSrc
   );
+
+  if (autoPlay) {
+    sphereEl.setAttribute("world-pos", "");
+  }
 
   // Append the created element to its parent
   parentEl.appendChild(sphereEl);
@@ -450,13 +457,13 @@ AFRAME.registerComponent("play-proxi", {
       }
       // console.log(colStatus);
     });
-    
+
     document.addEventListener("keyup", (event) => {
-    if (event.code === "Tab") {
-      proxiEl.components.sound.playSound();
-      console.log(proxiEl)
-    }
-  });
+      if (event.code === "Tab") {
+        proxiEl.components.sound.playSound();
+        console.log(proxiEl);
+      }
+    });
   },
 });
 
