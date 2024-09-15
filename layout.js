@@ -421,13 +421,14 @@ AFRAME.registerComponent("check-collide", {
           }, 1000);
         }
       }
-      // console.log(colStatus);
     });
+    
+          console.log(proxiEl);
 
     if (colStatus) {
-      if(!proxiEl.components.sound.isPlaying) {
-        proxiEl.components.sound.playSound();
-      }
+      // if(!proxiEl.components.sound.isPlaying) {
+      //   proxiEl.components.sound.playSound();
+      // }
       sounds.forEach((s) => {
         if (s != proxiEl) {
           s.components.sound.pauseSound();
