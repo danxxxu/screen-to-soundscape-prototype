@@ -16,9 +16,6 @@ fetchJSONData();
 const sceneEl = document.querySelector("a-scene");
 const assetEl = document.querySelector("a-assets");
 const y = 1.6;
-// const d1 = 8; // header 2
-// const d2 = 4; // header2 to header3
-// const dp = 2; // header to p
 const d1 = 10; // header 2
 const d2 = 8; // header2 to header3
 const dp = 6; // header to p
@@ -44,17 +41,21 @@ function loadAudio(data) {
   drawLayout(data);
 }
 
+// Recursively iterates through sections and subsections to load audio
 function iterateAudio(section, prename) {
   for (const key in section) {
     const name = prename + key.replace(":", "").replaceAll(" ", "_");
-    const header = name + "_header";
-    createAudio(header);
+    createAudio(
+      section[key].audio_path.replace("mp3s\\", "").replace(".mp3", "")
+    );
 
-    if (section[key].P != "") {
-      const nameP = name + "_P";
-      createAudio(nameP);
+    if (section[key].P && section[key].P.audio_path !== "") {
+      createAudio(
+        section[key].P.audio_path.replace("mp3s\\", "").replace(".mp3", "")
+      );
     }
 
+    // Recursively process subsections if they exist
     if (section[key].Subsections) {
       iterateAudio(section[key].Subsections, name + "_Subsections_");
     }
@@ -63,11 +64,8 @@ function iterateAudio(section, prename) {
 
 function createAudio(name) {
   const audioEl = document.createElement("audio");
-  const url =
-    "https://cdn.glitch.global/53d6d00c-ae48-4ff9-bb80-4a61d4cfaa29/" +
-    name +
-    ".mp3";
-  // const url = "https://cdn.glitch.global/53d6d00c-ae48-4ff9-bb80-4a61d4cfaa29/Introduction.mp3?v=1725365680828";
+  let url = `https://cdn.glitch.global/53d6d00c-ae48-4ff9-bb80-4a61d4cfaa29/${name}.mp3`;
+
   audioEl.setAttribute("id", name);
   audioEl.setAttribute("preload", "auto");
   audioEl.setAttribute("src", url);
@@ -94,46 +92,11 @@ function drawLayout(data) {
     false,
     false
   );
-  const titleOpen = createElement(
-    sceneEl,
-    x0,
-    y,
-    z,
-    "#EF2D5E",
-    "title",
-    "title-open",
-    "header1-open",
-    true,
-    true
-  );
-  const titleClose = createElement(
-    sceneEl,
-    x0,
-    y,
-    z,
-    "#EF2D5E",
-    "title",
-    "title-close",
-    "header1-close",
-    false,
-    false
-  );
-  titleOpen.addEventListener("sound-ended", function () {
-    titleEl.components.sound.playSound();
-  });
-  titleEl.addEventListener("sound-ended", function () {
-    titleClose.components.sound.playSound();
-  });
-  titleClose.addEventListener("sound-ended", function () {
-    setTimeout(() => {
-      titleOpen.components.sound.playSound();
-    }, 1000);
-  });
 
   // intro element; pink
   src = data.Introduction.replace("mp3s\\", "").replace(".mp3", "");
   const intro = createElement(
-    titleEl,
+    sceneEl,
     x0,
     0,
     z,
@@ -200,12 +163,12 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
     //     header only; blue color
     const name = prename + key.replace(":", "").replaceAll(" ", "_");
     const header = name + "_header";
-    const x1 = 0 - d * Math.cos(deg * i + angle);
-    const z1 = 0 - d / 2 - d * Math.sin(deg * i + angle);
+    const x1 = x - d * Math.cos(deg * i + angle);
+    const z1 = z - d / 2 - d * Math.sin(deg * i + angle);
     const id = key + i;
     const classH = "header";
     const el = createElement(
-      ele,
+      sceneEl,
       x1,
       y,
       z1,
@@ -222,9 +185,9 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
       const idP = id + "_p";
       const classP = "p";
       const nameP = name + "_P";
-      const xp = 0 - dp * Math.cos(deg * i + angle);
-      const zp = 0 - dp * Math.sin(deg * i + angle);
-      createElement(el, xp, y, zp, "#FFFF00", classP, idP, nameP, true, true);
+      const xp = x - dp * Math.cos(deg * i + angle);
+      const zp = z - dp * Math.sin(deg * i + angle);
+      createElement(sceneEl, xp, y, zp, "#FFFF00", classP, idP, nameP, true, true);
     }
 
     // iterate subsections
