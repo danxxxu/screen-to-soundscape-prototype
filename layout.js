@@ -80,10 +80,30 @@ function createAudio(name) {
 function drawLayout(data) {
   // Create title element (pink)
   z = -d1;
-  const titleEl = createElement(sceneEl, x0, y, z, "#EF2D5E", "title", "title", data.Title.audio_path.replace("mp3s\\", "").replace(".mp3", ""), true, true);
+  const titleEl = createElement(
+    sceneEl,
+    x0,
+    y,
+    z,
+    "#EF2D5E",
+    "title",
+    "title",
+    data.Title.audio_path.replace("mp3s\\", "").replace(".mp3", ""),
+    true
+  );
 
   // Create introduction element (pink)
-  const introEl = createElement(titleEl, x0, 0, z, "#EF2D5E", "intro", "intro", data.Introduction.audio_path.replace("mp3s\\", "").replace(".mp3", ""), true, true);
+  const introEl = createElement(
+    titleEl,
+    x0,
+    0,
+    z,
+    "#EF2D5E",
+    "intro",
+    "intro",
+    data.Introduction.audio_path.replace("mp3s\\", "").replace(".mp3", ""),
+    true
+  );
 
   // Recursively create sections and subsections
   iterateSection(x0, 0, z, d1, data.Sections, introEl, "Sections_", 0);
@@ -92,8 +112,26 @@ function drawLayout(data) {
   sounds = document.querySelectorAll("a-sphere");
   document.querySelector("[camera]").setAttribute("check-collide", "");
 
+  document.addEventListener("keyup", (event) => {
+    if (event.code === "Space") {
+      // console.log(event.code);
+      checkAudio(sounds);
+      // console.log(sounds);
+    }
+  });
+
   // Create boundary sound object (ivory color)
-  createElement(sceneEl, minX - margin, y, z0 + margin, "#F0FFFF", "sound-cues", "bound", "bound-cue", false, false);
+  createElement(
+    sceneEl,
+    minX - margin,
+    y,
+    z0 + margin,
+    "#F0FFFF",
+    "sound-cues",
+    "bound",
+    "bound-cue",
+    false
+  );
 }
 
 // Recursively iterates through sections, creating header and paragraph elements
@@ -103,31 +141,72 @@ function iterateSection(x, y, z, d, section, parentEl, prename, angle) {
 
   Object.keys(section).forEach((key, i) => {
     const name = prename + key.replace(":", "").replaceAll(" ", "_");
-    const headerName = section[key].audio_path.replace("mp3s\\", "").replace(".mp3", "");
+    const headerName = section[key].audio_path
+      .replace("mp3s\\", "")
+      .replace(".mp3", "");
 
     // Calculate position for the section
     const x1 = -d * Math.cos(degStep * i + angle);
     const z1 = -d / 2 - d * Math.sin(degStep * i + angle);
 
     // Create header element (blue)
-    const headerEl = createElement(parentEl, x1, y, z1, "#00FFFF", "header", `${key}${i}`, headerName, true, true);
+    const headerEl = createElement(
+      parentEl,
+      x1,
+      y,
+      z1,
+      "#00FFFF",
+      "header",
+      `${key}${i}`,
+      headerName,
+      true
+    );
 
     // If paragraph exists, create it (yellow)
     if (section[key].P) {
       const xp = -dp * Math.cos(degStep * i + angle);
       const zp = -dp * Math.sin(degStep * i + angle);
-      createElement(headerEl, xp, y, zp, "#FFFF00", "p", `${key}${i}_p`, section[key].P.audio_path.replace("mp3s\\", "").replace(".mp3", ""), true, true);
+      createElement(
+        headerEl,
+        xp,
+        y,
+        zp,
+        "#FFFF00",
+        "p",
+        `${key}${i}_p`,
+        section[key].P.audio_path.replace("mp3s\\", "").replace(".mp3", ""),
+        true
+      );
     }
 
     // Recursively handle subsections
     if (section[key].Subsections) {
-      iterateSection(x1, y, z1, d2, section[key].Subsections, headerEl, name + "_Subsections_", 0);
+      iterateSection(
+        x1,
+        y,
+        z1,
+        d2,
+        section[key].Subsections,
+        headerEl,
+        name + "_Subsections_",
+        0
+      );
     }
   });
 }
 
 // Helper function to create a visual element (sphere) in the scene
-function createElement(parentEl, x, y, z, color, className, id, soundId, collide, autoPlay) {
+function createElement(
+  parentEl,
+  x,
+  y,
+  z,
+  color,
+  className,
+  id,
+  soundId,
+  autoPlay
+) {
   const sphereEl = document.createElement("a-sphere");
 
   // Set attributes for the sphere element
@@ -140,12 +219,12 @@ function createElement(parentEl, x, y, z, color, className, id, soundId, collide
 
   // Set sound attributes
   const soundSrc = `src:#${soundId}; rolloffFactor: 3`;
-  sphereEl.setAttribute("sound", autoPlay ? `${soundSrc}; autoplay: true; loop: false; distanceModel: exponential; refDistance: 3` : soundSrc);
-
-  // Enable collision detection if required
-  if (collide) {
-    sphereEl.setAttribute("collide", "");
-  }
+  sphereEl.setAttribute(
+    "sound",
+    autoPlay
+      ? `${soundSrc}; autoplay: true; loop: false; distanceModel: exponential; refDistance: 3`
+      : soundSrc
+  );
 
   // Append the created element to its parent
   parentEl.appendChild(sphereEl);
@@ -153,19 +232,8 @@ function createElement(parentEl, x, y, z, color, className, id, soundId, collide
   return document.getElementById(id); // Return the created element
 }
 
-function distance(x1, z1, x2, z2) {
-  return Math.sqrt((x1 - x2) * (x1 - x2) + (z1 - z2) * (z1 - z2));
-}
-
 //////////////// PLAY AUDIO ////////////////
 let playing = true;
-document.addEventListener("keyup", (event) => {
-  if (event.code === "Space") {
-    // console.log(event.code);
-    checkAudio(sounds);
-    // console.log(sounds);
-  }
-});
 
 function checkAudio(audioArray) {
   if (!playing) {
@@ -315,27 +383,6 @@ AFRAME.registerComponent("hit-bounds", {
   },
 });
 
-AFRAME.registerComponent("collide", {
-  init: function () {
-    this.worldpos = new THREE.Vector3();
-  },
-  tick: function () {
-    // const cameraEl = document.querySelector("[camera]");
-    // let camX = cameraEl.object3D.position.x;
-    // let camZ = cameraEl.object3D.position.z;
-    // this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
-    // if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
-    //   // console.log(this.el.id);
-    //   sounds.forEach((s) => {
-    //     if (s != this.el) {
-    //       s.components.sound.pauseSound();
-    //       // console.log(s.components.sound.isPlaying);
-    //     }
-    //   });
-    // }
-  },
-});
-
 AFRAME.registerComponent("check-collide", {
   init: function () {
     this.snapped = false;
@@ -384,3 +431,36 @@ AFRAME.registerComponent("check-collide", {
     }
   },
 });
+
+AFRAME.registerComponent("play-proxi", {
+  init: function () {},
+  tick: function () {
+    let worldpos = new THREE.Vector3();
+    let elX = this.el.object3D.position.x;
+    let elZ = this.el.object3D.position.z;
+    let proxiEl;
+    let closeDist = 100;
+
+    sounds.forEach((s) => {
+      s.getObject3D("mesh").getWorldPosition(worldpos);
+      // console.log(worldpos)
+      if (distance(elX, elZ, worldpos.x, worldpos.z) < closeDist) {
+        closeDist = distance(elX, elZ, worldpos.x, worldpos.z);
+        proxiEl = s;
+      }
+      // console.log(colStatus);
+    });
+    
+    document.addEventListener("keyup", (event) => {
+    if (event.code === "Tab") {
+      proxiEl.components.sound.playSound();
+      console.log(proxiEl)
+    }
+  });
+  },
+});
+
+// Helper function to calculate distance between two points (x1, z1) and (x2, z2)
+function distance(x1, z1, x2, z2) {
+  return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(z1 - z2, 2));
+}
