@@ -30,6 +30,7 @@ let minX = 0,
   minZ = 0;
 const margin = 2; //get boundaries
 const proxi = 2;
+let elCount = 0;
 
 //////////////// LOAD AUDIO ////////////////
 function loadAudio(data) {
@@ -66,7 +67,7 @@ function iterateAudio(section, prename) {
 
 function createAudio(name) {
   const audioEl = document.createElement("audio");
-  let url = `https://cdn.glitch.global/53d6d00c-ae48-4ff9-bb80-4a61d4cfaa29/${name}.mp3`;
+  let url = `https://cdn.glitch.global/91bb62d6-e769-4965-8bb6-e45f81e52be1/${name}.mp3`;
 
   audioEl.setAttribute("id", name);
   audioEl.setAttribute("preload", "auto");
@@ -122,6 +123,8 @@ function drawLayout(data) {
       // console.log(sounds);
     }
   });
+  
+  console.log(elCount);
 
   // Create boundary sound object (ivory color)
   createElement(
@@ -235,6 +238,8 @@ function createElement(
 
   // Append the created element to its parent
   parentEl.appendChild(sphereEl);
+  
+    elCount++;
 
   return document.getElementById(id); // Return the created element
 }
@@ -418,6 +423,8 @@ AFRAME.registerComponent("check-collide", {
       }
       // console.log(colStatus);
     });
+    
+    
 
     if (colStatus) {
       sounds.forEach((s) => {
@@ -429,12 +436,12 @@ AFRAME.registerComponent("check-collide", {
 
     if (!colStatus) {
       this.snapped = false;
-      sounds.forEach((s) => {
-        if (!s.components.sound.isPlaying) {
-          s.components.sound.playSound();
-          // console.log(s.components.sound.isPlaying);
-        }
-      });
+      // sounds.forEach((s) => {
+      //   if (!s.components.sound.isPlaying) {
+      //     s.components.sound.playSound();
+      //     // console.log(s.components.sound.isPlaying);
+      //   }
+      // });
     }
   },
 });
