@@ -115,7 +115,6 @@ function drawLayout(data) {
 
   // Add sound collision detection and boundary
   sounds = document.querySelectorAll("a-sphere");
-  // document.querySelector("[camera]").setAttribute("check-collide", "");
   document.querySelector("[camera]").setAttribute("play-proxi", "");
 
   document.addEventListener("keyup", (event) => {
@@ -401,77 +400,28 @@ AFRAME.registerComponent("hit-bounds", {
   },
 });
 
+let collide = false;
 AFRAME.registerComponent("collide", {
   init: function () {
     this.worldpos = new THREE.Vector3();
   },
   tick: function () {
-    // const cameraEl = this.el.sceneEl.camera.el;
-    const cameraEl = document.querySelector("[camera]");
-    let camX = cameraEl.object3D.position.x;
-    let camZ = cameraEl.object3D.position.z;
+    let camX = this.el.object3D.position.x;
+    let camZ = this.el.object3D.position.z;
     this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
     if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
       // console.log(this.el.id);
-      this.el.components.sound.playSound();
+      if (!collide) {
+        this.el.components.sound.playSound();
+        collide = true;
+      }
       sounds.forEach((s) => {
         if (s != this.el) {
           s.components.sound.pauseSound();
         }
       });
-    }
-  },
-});
-
-AFRAME.registerComponent("check-collide", {
-  init: function () {
-    this.snapped = false;
-  },
-  tick: function () {
-    let worldpos = new THREE.Vector3();
-    let elX = this.el.object3D.position.x;
-    let elZ = this.el.object3D.position.z;
-    let colStatus = false;
-    let proxiEl;
-
-    sounds.forEach((s) => {
-      s.getObject3D("mesh").getWorldPosition(worldpos);
-      // console.log(worldpos)
-      if (distance(elX, elZ, worldpos.x, worldpos.z) < proxi) {
-        colStatus = true;
-        proxiEl = s;
-        if (!this.snapped) {
-          this.el.object3D.position.x = worldpos.x;
-          this.el.object3D.position.z = worldpos.z;
-          setTimeout(() => {
-            this.snapped = true;
-            console.log(this.snapped);
-          }, 1000);
-        }
-      }
-    });
-
-    console.log(proxiEl);
-
-    if (colStatus) {
-      // if(!proxiEl.components.sound.isPlaying) {
-      //   proxiEl.components.sound.playSound();
-      // }
-      sounds.forEach((s) => {
-        if (s != proxiEl) {
-          s.components.sound.pauseSound();
-        }
-      });
-    }
-
-    if (!colStatus) {
-      this.snapped = false;
-      // sounds.forEach((s) => {
-      //   if (!s.components.sound.isPlaying) {
-      //     s.components.sound.playSound();
-      //     // console.log(s.components.sound.isPlaying);
-      //   }
-      // });
+    } else {
+      collide = false;
     }
   },
 });
