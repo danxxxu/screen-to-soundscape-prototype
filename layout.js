@@ -33,8 +33,10 @@ const proxi = 2;
 
 //////////////// LOAD AUDIO ////////////////
 function loadAudio(data) {
-  createAudio(data.Title.replace("mp3s\\", "").replace(".mp3", ""));
-  createAudio(data.Introduction.replace("mp3s\\", "").replace(".mp3", ""));
+  createAudio(data.Title.audio_path.replace("mp3s\\", "").replace(".mp3", ""));
+  createAudio(
+    data.Introduction.audio_path.replace("mp3s\\", "").replace(".mp3", "")
+  );
 
   iterateAudio(data.Sections, "Sections_");
 
@@ -78,38 +80,18 @@ function drawLayout(data) {
   // console.log(data);
 
   // title element; pink
-  z = 0 - d1;
-  src = data.Title.replace("mp3s\\", "").replace(".mp3", "");
-  const titleEl = createElement(
-    sceneEl,
-    x0,
-    y,
-    z,
-    "#EF2D5E",
-    "title",
-    "title",
-    src,
-    false,
-    false
-  );
+  z = z - d1;
+  src = data.Title.audio_path.replace("mp3s\\", "").replace(".mp3", "");
+  createElement(x0, y, z, "#EF2D5E", "title", "title", src, false, false);
 
   // intro element; pink
-  src = data.Introduction.replace("mp3s\\", "").replace(".mp3", "");
-  const intro = createElement(
-    sceneEl,
-    x0,
-    0,
-    z,
-    "#EF2D5E",
-    "intro",
-    "intro",
-    src,
-    true,
-    true
-  );
+  z = z - d1;
+  src = data.Introduction.audio_path.replace("mp3s\\", "").replace(".mp3", "");
+  createElement(x0, y, z, "#EF2D5E", "intro", "intro", src, true, true);
 
   // sections
-  iterateSection(x0, 0, z, d1, data.Sections, intro, "Sections_", 0);
+  z = z - d1;
+  iterateSection(x0, y, z, d1, data.Sections, "Sections_", 0);
   // select elements after creation
   sounds = document.querySelectorAll("a-sphere");
   document.querySelector("[camera]").setAttribute("check-collide", "");
@@ -137,7 +119,6 @@ function drawLayout(data) {
   // create boundary sound object #F0FFFF ivory color
   //   console.log(minX);
   createElement(
-    sceneEl,
     minX - margin,
     y,
     z0 + margin,
@@ -150,7 +131,7 @@ function drawLayout(data) {
   );
 }
 
-function iterateSection(x, y, z, d, section, ele, prename, angle) {
+function iterateSection(x, y, z, d, section, prename, angle) {
   const num = Object.keys(section).length;
   if (num == 1) {
     deg = Math.PI / 2;
@@ -167,18 +148,7 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
     const z1 = z - d / 2 - d * Math.sin(deg * i + angle);
     const id = key + i;
     const classH = "header";
-    const el = createElement(
-      sceneEl,
-      x1,
-      y,
-      z1,
-      "#00FFFF",
-      classH,
-      id,
-      header,
-      true,
-      true
-    );
+    createElement(x1, y, z1, "#00FFFF", classH, id, header, true, true);
 
     //       load p; yellow color
     if (section[key].P != "") {
@@ -187,7 +157,7 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
       const nameP = name + "_P";
       const xp = x - dp * Math.cos(deg * i + angle);
       const zp = z - dp * Math.sin(deg * i + angle);
-      createElement(sceneEl, xp, y, zp, "#FFFF00", classP, idP, nameP, true, true);
+      createElement(xp, y, zp, "#FFFF00", classP, idP, nameP, true, true);
     }
 
     // iterate subsections
@@ -199,7 +169,6 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
         z1,
         d2,
         section[key].Subsections,
-        el,
         name + "_Subsections_",
         0
         // deg * i - 0.5 * Math.PI
@@ -209,7 +178,7 @@ function iterateSection(x, y, z, d, section, ele, prename, angle) {
   }
 }
 
-function createElement(ele, x, y, z, col, c, id, s, collide, auto) {
+function createElement(x, y, z, col, c, id, s, collide, auto) {
   const sphereEl = document.createElement("a-sphere");
   sphereEl.setAttribute("color", col);
   sphereEl.setAttribute("shader", "flat");
@@ -235,8 +204,7 @@ function createElement(ele, x, y, z, col, c, id, s, collide, auto) {
   // console.log(z);
   // console.log(s);
 
-  ele.appendChild(sphereEl);
-  return document.getElementById(id);
+  sceneEl.appendChild(sphereEl);
 }
 
 function distance(x1, z1, x2, z2) {
