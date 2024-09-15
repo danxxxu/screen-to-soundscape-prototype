@@ -423,10 +423,11 @@ AFRAME.registerComponent("check-collide", {
       }
       // console.log(colStatus);
     });
-    
-    
 
     if (colStatus) {
+      if(!proxiEl.components.sound.isPlaying) {
+        proxiEl.components.sound.playSound();
+      }
       sounds.forEach((s) => {
         if (s != proxiEl) {
           s.components.sound.pauseSound();
