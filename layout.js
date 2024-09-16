@@ -31,6 +31,7 @@ let minX = 0,
 const margin = 2; //get boundaries
 const proxi = 2;
 let elCount = 0;
+let collide = true;
 let checkCollide = false;
 
 //////////////// LOAD AUDIO ////////////////
@@ -247,13 +248,10 @@ function createElement(
 
 //////////////// PLAY AUDIO ////////////////
 let playing = true;
-
 function checkAudio(audioArray) {
   if (!playing) {
     audioArray.forEach((s) => {
-      if (!s.components.sound.isPlaying) {
-        s.components.sound.playSound();
-      }
+      s.components.sound.playSound();
     });
     playing = true;
     console.log("play");
@@ -403,23 +401,24 @@ AFRAME.registerComponent("collide", {
     this.worldpos = new THREE.Vector3();
   },
   tick: function () {
-    // const cameraEl = this.el.sceneEl.camera.el;
-    const cameraEl = document.querySelector("[camera]");
-    let camX = cameraEl.object3D.position.x;
-    let camZ = cameraEl.object3D.position.z;
-    this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
-    if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
-      // console.log(this.el);
-      checkCollide = true;
-      console.log(this.el.components.sound.isPlaying);
-      if (!this.el.components.sound.isPlaying) {
+    if (collide) {
+      // const cameraEl = this.el.sceneEl.camera.el;
+      const cameraEl = document.querySelector("[camera]");
+      let camX = cameraEl.object3D.position.x;
+      let camZ = cameraEl.object3D.position.z;
+      this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
+      if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
+        // console.log(this.el);
+        checkCollide = true;
+        collide = false;
+        // console.log(this.el.components.sound.isPlaying);
         this.el.components.sound.playSound();
+        sounds.forEach((s) => {
+          if (s != this.el) {
+            s.components.sound.pauseSound();
+          }
+        });
       }
-      sounds.forEach((s) => {
-        if (s != this.el) {
-          s.components.sound.pauseSound();
-        }
-      });
     }
   },
 });
@@ -427,12 +426,12 @@ AFRAME.registerComponent("collide", {
 AFRAME.registerComponent("check-collide", {
   init: function () {},
   tick: function () {
-    let worldpos = new THREE.Vector3();
-    let elX = this.el.object3D.position.x;
-    let elZ = this.el.object3D.position.z;
-    let colStatus = false;
-    // console.log(checkCollide);
     if (checkCollide) {
+      let worldpos = new THREE.Vector3();
+      let elX = this.el.object3D.position.x;
+      let elZ = this.el.object3D.position.z;
+      let colStatus = false;
+      // console.log(checkCollide);
       sounds.forEach((s) => {
         s.getObject3D("mesh").getWorldPosition(worldpos);
         // console.log(worldpos)
@@ -448,6 +447,7 @@ AFRAME.registerComponent("check-collide", {
           }
         });
         checkCollide = false;
+        collide = true;
       }
     }
   },
@@ -466,6 +466,7 @@ AFRAME.registerComponent("play-proxi", {
       // console.log(event.code)
       if (event.code === "ShiftLeft") {
         checkCollide = false;
+        collide = false;
         sounds.forEach((s) => {
           s.getObject3D("mesh").getWorldPosition(worldpos);
           // console.log(worldpos)
@@ -480,7 +481,7 @@ AFRAME.registerComponent("play-proxi", {
           }
         });
         proxiEl.components.sound.playSound();
-        console.log(proxiEl);
+        // console.log(proxiEl);
       }
     });
   },
