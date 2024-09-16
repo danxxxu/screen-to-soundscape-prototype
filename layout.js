@@ -29,8 +29,9 @@ let minX = 0,
   maxX = 0,
   minZ = 0;
 const margin = 2; //get boundaries
-const proxi = 1;
+const proxi = 2;
 let elCount = 0;
+
 
 //////////////// LOAD AUDIO ////////////////
 function loadAudio(data) {
@@ -111,14 +112,14 @@ function drawLayout(data) {
 
   // Add sound collision detection and boundary
   sounds = document.querySelectorAll("a-sphere");
-  // document.querySelector("[camera]").setAttribute("collide", "");
+  document.querySelector("[camera]").setAttribute("check-collide", "");
   document.querySelector("[camera]").setAttribute("play-proxi", "");
 
   document.addEventListener("keyup", (event) => {
     if (event.code === "Space") {
       // console.log(event.code);
+      colStatus = false;
       checkAudio(sounds);
-      // console.log(sounds);
     }
   });
 
@@ -434,7 +435,7 @@ AFRAME.registerComponent("collide", {
     let camZ = cameraEl.object3D.position.z;
     this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
     if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
-      console.log(this.el);
+      // console.log(this.el);
       if (!this.el.components.sound.isPlaying) {
         this.el.components.sound.playSound();
       }
@@ -453,7 +454,6 @@ AFRAME.registerComponent("check-collide", {
     let worldpos = new THREE.Vector3();
     let elX = this.el.object3D.position.x;
     let elZ = this.el.object3D.position.z;
-    let colStatus = false;
 
     sounds.forEach((s) => {
       s.getObject3D("mesh").getWorldPosition(worldpos);
@@ -464,12 +464,7 @@ AFRAME.registerComponent("check-collide", {
     });
 
     if (!colStatus) {
-      this.snapped = false;
-      sounds.forEach((s) => {
-        if (!s.components.sound.isPlaying) {
-          s.components.sound.playSound();
-        }
-      });
+      checkAudio(sounds);
     }
   },
 });
