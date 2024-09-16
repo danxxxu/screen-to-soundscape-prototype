@@ -93,7 +93,6 @@ function drawLayout(data) {
     true
   );
 
-
   // Create introduction element (pink)
   const introEl = createElement(
     titleEl,
@@ -123,7 +122,7 @@ function drawLayout(data) {
     }
   });
 
-  console.log(elCount);
+  // console.log(elCount);
 
   // Create boundary sound object (ivory color)
   createElement(
@@ -137,8 +136,8 @@ function drawLayout(data) {
     "bound-cue",
     false
   );
-  
-    document.querySelector("[camera]").setAttribute("hit-bounds", "");
+
+  document.querySelector("[camera]").setAttribute("hit-bounds", "");
 }
 
 // Recursively iterates through sections, creating header and paragraph elements
@@ -225,11 +224,11 @@ function createElement(
   sphereEl.setAttribute("id", id);
 
   // Set sound attributes
-  const soundSrc = `src:#${soundId}; rolloffFactor: 3`;
+  const soundSrc = `src:#${soundId}`;
   sphereEl.setAttribute(
     "sound",
     autoPlay
-      ? `${soundSrc}; autoplay: true; loop: false; distanceModel: exponential; refDistance: 3`
+      ? `${soundSrc}; autoplay: true; loop: false; distanceModel: exponential; refDistance: 3; rolloffFactor: 3`
       : soundSrc
   );
   if (autoPlay) {
@@ -245,12 +244,14 @@ function createElement(
 }
 
 //////////////// PLAY AUDIO ////////////////
-let playing = true;
+let playing = false;
 
 function checkAudio(audioArray) {
   if (!playing) {
     audioArray.forEach((s) => {
-      s.components.sound.playSound();
+      if (!s.components.sound.isPlaying) {
+        s.components.sound.playSound();
+      }
     });
     playing = true;
     console.log("play");
@@ -412,8 +413,6 @@ AFRAME.registerComponent("collide", {
           s.components.sound.playSound();
           collide = true;
         }
-      } else {
-        s.components.sound.pauseSound();
       }
     });
 
