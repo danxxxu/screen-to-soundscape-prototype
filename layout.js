@@ -244,7 +244,7 @@ function createElement(
 }
 
 //////////////// PLAY AUDIO ////////////////
-let playing = false;
+let playing = true;
 
 function checkAudio(audioArray) {
   if (!playing) {
@@ -431,18 +431,24 @@ AFRAME.registerComponent("play-proxi", {
     let proxiEl;
     let closeDist = 100;
 
-    sounds.forEach((s) => {
-      s.getObject3D("mesh").getWorldPosition(worldpos);
-      // console.log(worldpos)
-      if (distance(elX, elZ, worldpos.x, worldpos.z) < closeDist) {
-        closeDist = distance(elX, elZ, worldpos.x, worldpos.z);
-        proxiEl = s;
-      }
-      // console.log(colStatus);
-    });
-
     document.addEventListener("keyup", (event) => {
-      if (event.code === "Tab") {
+      // console.log(event.code)
+      if (event.code === "ShiftLeft") {
+        sounds.forEach((s) => {
+          s.getObject3D("mesh").getWorldPosition(worldpos);
+          // console.log(worldpos)
+          if (distance(elX, elZ, worldpos.x, worldpos.z) < closeDist) {
+            closeDist = distance(elX, elZ, worldpos.x, worldpos.z);
+            proxiEl = s;
+          }
+          // console.log(colStatus);
+        });
+        sounds.forEach((s) => {
+          if (s != proxiEl) {
+            s.components.sound.pauseSound();
+          }
+          // console.log(colStatus);
+        });
         proxiEl.components.sound.playSound();
         console.log(proxiEl);
       }
