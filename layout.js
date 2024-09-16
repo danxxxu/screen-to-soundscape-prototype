@@ -31,7 +31,6 @@ let minX = 0,
 const margin = 2; //get boundaries
 const proxi = 2;
 let elCount = 0;
-let collide = true;
 let checkCollide = false;
 
 //////////////// LOAD AUDIO ////////////////
@@ -401,7 +400,6 @@ AFRAME.registerComponent("collide", {
     this.worldpos = new THREE.Vector3();
   },
   tick: function () {
-    if (collide) {
       // const cameraEl = this.el.sceneEl.camera.el;
       const cameraEl = document.querySelector("[camera]");
       let camX = cameraEl.object3D.position.x;
@@ -410,7 +408,7 @@ AFRAME.registerComponent("collide", {
       if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
         // console.log(this.el);
         checkCollide = true;
-        collide = false;
+        // collide = false;
         // console.log(this.el.components.sound.isPlaying);
         this.el.components.sound.playSound();
         sounds.forEach((s) => {
@@ -419,7 +417,6 @@ AFRAME.registerComponent("collide", {
           }
         });
       }
-    }
   },
 });
 
@@ -447,7 +444,6 @@ AFRAME.registerComponent("check-collide", {
           }
         });
         checkCollide = false;
-        collide = true;
       }
     }
   },
@@ -466,7 +462,6 @@ AFRAME.registerComponent("play-proxi", {
       // console.log(event.code)
       if (event.code === "ShiftLeft") {
         checkCollide = false;
-        collide = false;
         sounds.forEach((s) => {
           s.getObject3D("mesh").getWorldPosition(worldpos);
           // console.log(worldpos)
