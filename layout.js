@@ -111,7 +111,7 @@ function drawLayout(data) {
 
   // Add sound collision detection and boundary
   sounds = document.querySelectorAll("a-sphere");
-  document.querySelector("[camera]").setAttribute("collide", "");
+  // document.querySelector("[camera]").setAttribute("collide", "");
   document.querySelector("[camera]").setAttribute("play-proxi", "");
 
   document.addEventListener("keyup", (event) => {
@@ -228,11 +228,12 @@ function createElement(
   sphereEl.setAttribute(
     "sound",
     autoPlay
-      ? `${soundSrc}; autoplay: true; loop: false; distanceModel: exponential; refDistance: 3; rolloffFactor: 3`
+      ? `${soundSrc}; autoplay: true; loop: true; distanceModel: exponential; refDistance: 3; rolloffFactor: 3`
       : soundSrc
   );
   if (autoPlay) {
     sphereEl.setAttribute("world-pos", "");
+    sphereEl.setAttribute("collide", "");
   }
 
   // Append the created element to its parent
@@ -396,29 +397,80 @@ AFRAME.registerComponent("hit-bounds", {
   },
 });
 
-let collide = false;
+// let collide = false;
+// AFRAME.registerComponent("collide", {
+//   init: function () {
+//     this.worldpos = new THREE.Vector3();
+//   },
+//   tick: function () {
+//     let camX = this.el.object3D.position.x;
+//     let camZ = this.el.object3D.position.z;
+
+//     sounds.forEach((s) => {
+//       s.getObject3D("mesh").getWorldPosition(this.worldpos);
+//       if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
+//         // console.log(this.el.id);
+//         if (!collide) {
+//           s.components.sound.playSound();
+//           collide = true;
+//         }
+//       }
+//     });
+
+//     document.addEventListener("keydown", (event) => {
+//       collide = false;
+//     });
+//   },
+// });
+
 AFRAME.registerComponent("collide", {
   init: function () {
     this.worldpos = new THREE.Vector3();
   },
   tick: function () {
-    let camX = this.el.object3D.position.x;
-    let camZ = this.el.object3D.position.z;
+    // const cameraEl = this.el.sceneEl.camera.el;
+    const cameraEl = document.querySelector("[camera]");
+    let camX = cameraEl.object3D.position.x;
+    let camZ = cameraEl.object3D.position.z;
+    this.el.getObject3D("mesh").getWorldPosition(this.worldpos);
+    if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
+      console.log(this.el);
+      if (!this.el.components.sound.isPlaying) {
+        this.el.components.sound.playSound();
+      }
+      sounds.forEach((s) => {
+        if (s != this.el) {
+          s.components.sound.pauseSound();
+        }
+      });
+    }
+  },
+});
+
+AFRAME.registerComponent("check-collide", {
+  init: function () {},
+  tick: function () {
+    let worldpos = new THREE.Vector3();
+    let elX = this.el.object3D.position.x;
+    let elZ = this.el.object3D.position.z;
+    let colStatus = false;
 
     sounds.forEach((s) => {
-      s.getObject3D("mesh").getWorldPosition(this.worldpos);
-      if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
-        // console.log(this.el.id);
-        if (!collide) {
-          s.components.sound.playSound();
-          collide = true;
-        }
+      s.getObject3D("mesh").getWorldPosition(worldpos);
+      // console.log(worldpos)
+      if (distance(elX, elZ, worldpos.x, worldpos.z) < proxi) {
+        colStatus = true;
       }
     });
 
-    document.addEventListener("keydown", (event) => {
-      collide = false;
-    });
+    if (!colStatus) {
+      this.snapped = false;
+      sounds.forEach((s) => {
+        if (!s.components.sound.isPlaying) {
+          s.components.sound.playSound();
+        }
+      });
+    }
   },
 });
 
@@ -441,13 +493,11 @@ AFRAME.registerComponent("play-proxi", {
             closeDist = distance(elX, elZ, worldpos.x, worldpos.z);
             proxiEl = s;
           }
-          // console.log(colStatus);
         });
         sounds.forEach((s) => {
           if (s != proxiEl) {
             s.components.sound.pauseSound();
           }
-          // console.log(colStatus);
         });
         proxiEl.components.sound.playSound();
         console.log(proxiEl);
