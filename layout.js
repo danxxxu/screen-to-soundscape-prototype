@@ -68,7 +68,7 @@ function iterateAudio(section, prename) {
 
 function createAudio(name) {
   const audioEl = document.createElement("audio");
-  let url = `https://cdn.glitch.global/91bb62d6-e769-4965-8bb6-e45f81e52be1/${name}.mp3`;
+  let url = `https://cdn.glitch.global/ae883fef-97f3-4a7f-9e84-8ff882dc9acf/${name}.mp3`;
 
   audioEl.setAttribute("id", name);
   audioEl.setAttribute("preload", "auto");
