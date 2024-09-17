@@ -32,6 +32,7 @@ const margin = 2; //get boundaries
 const proxi = 2;
 let elCount = 0;
 let checkCollide = false;
+let collide = true;
 
 //////////////// LOAD AUDIO ////////////////
 function loadAudio(data) {
@@ -400,6 +401,7 @@ AFRAME.registerComponent("collide", {
     this.worldpos = new THREE.Vector3();
   },
   tick: function () {
+    if (collide) {
       // const cameraEl = this.el.sceneEl.camera.el;
       const cameraEl = document.querySelector("[camera]");
       let camX = cameraEl.object3D.position.x;
@@ -408,8 +410,7 @@ AFRAME.registerComponent("collide", {
       if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
         // console.log(this.el);
         checkCollide = true;
-        // collide = false;
-        // console.log(this.el.components.sound.isPlaying);
+        collide = false;
         this.el.components.sound.playSound();
         sounds.forEach((s) => {
           if (s != this.el) {
@@ -417,6 +418,7 @@ AFRAME.registerComponent("collide", {
           }
         });
       }
+    }
   },
 });
 
@@ -444,6 +446,7 @@ AFRAME.registerComponent("check-collide", {
           }
         });
         checkCollide = false;
+        collide = true;
       }
     }
   },
