@@ -113,7 +113,7 @@ function drawLayout(data) {
 
   // Add sound collision detection and boundary
   sounds = document.querySelectorAll("a-sphere");
-  document.querySelector("[camera]").setAttribute("check-collide", "");
+  // document.querySelector("[camera]").setAttribute("check-collide", "");
   document.querySelector("[camera]").setAttribute("play-proxi", "");
 
   document.addEventListener("keyup", (event) => {
@@ -247,7 +247,7 @@ function createElement(
 }
 
 //////////////// PLAY AUDIO ////////////////
-let playing = false;
+let playing = true;
 function checkAudio(audioArray) {
   if (!playing) {
     audioArray.forEach((s) => {
@@ -410,8 +410,9 @@ AFRAME.registerComponent("collide", {
       if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
         // console.log(this.el);
         checkCollide = true;
-        collide = false;
+        // collide = false;
         this.el.components.sound.playSound();
+        console.log("collide: " + this.el.id)
         sounds.forEach((s) => {
           if (s != this.el) {
             s.components.sound.pauseSound();
