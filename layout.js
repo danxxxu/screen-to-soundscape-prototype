@@ -247,7 +247,7 @@ function createElement(
 }
 
 //////////////// PLAY AUDIO ////////////////
-let playing = true;
+let playing = false;
 function checkAudio(audioArray) {
   if (!playing) {
     audioArray.forEach((s) => {
