@@ -124,6 +124,10 @@ function drawLayout(data) {
     }
   });
 
+  document.addEventListener("keydown", (event) => {
+    collide = true;
+  });
+
   // console.log(elCount);
 
   // Create boundary sound object (ivory color)
@@ -410,9 +414,9 @@ AFRAME.registerComponent("collide", {
       if (distance(camX, camZ, this.worldpos.x, this.worldpos.z) < proxi) {
         // console.log(this.el);
         checkCollide = true;
-        // collide = false;
+        collide = false;
         this.el.components.sound.playSound();
-        console.log("collide: " + this.el.id)
+        console.log("collide: " + this.el.id);
         sounds.forEach((s) => {
           if (s != this.el) {
             s.components.sound.pauseSound();
