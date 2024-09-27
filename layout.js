@@ -69,8 +69,11 @@ function iterateAudio(section, prename) {
 
 function createAudio(name) {
   const audioEl = document.createElement("audio");
-  let url = `https://cdn.glitch.global/ae883fef-97f3-4a7f-9e84-8ff882dc9acf/${name}.mp3`;
-  console.log(name+".mp3");
+  let url = `https://cdn.glitch.global/ae883fef-97f3-4a7f-9e84-8ff882dc9acf/${
+    name + "_R"
+  }.wav`;
+
+  // let url = `https://cdn.glitch.global/ae883fef-97f3-4a7f-9e84-8ff882dc9acf/${name}.mp3`; // without reverb
 
   audioEl.setAttribute("id", name);
   audioEl.setAttribute("preload", "auto");
