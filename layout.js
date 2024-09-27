@@ -482,6 +482,7 @@ AFRAME.registerComponent("play-proxi", {
             proxiEl = s;
           }
         });
+        // proxiEl.components.sound.stopSound();
         sounds.forEach((s) => {
           if (s != proxiEl) {
             s.components.sound.pauseSound();
