@@ -70,7 +70,7 @@ function iterateAudio(section, prename) {
 function createAudio(name) {
   const audioEl = document.createElement("audio");
   let url = `https://cdn.glitch.global/ae883fef-97f3-4a7f-9e84-8ff882dc9acf/${
-    name + "_R"
+    name + "_R2"
   }.wav`;
 
   // let url = `https://cdn.glitch.global/ae883fef-97f3-4a7f-9e84-8ff882dc9acf/${name}.mp3`; // without reverb
