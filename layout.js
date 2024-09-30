@@ -238,7 +238,7 @@ function createElement(
   sphereEl.setAttribute(
     "sound",
     autoPlay
-      ? `${soundSrc}; autoplay: true; loop: false; distanceModel: exponential; refDistance: 3; rolloffFactor: 3`
+      ? `${soundSrc}; autoplay: false; loop: false; distanceModel: exponential; refDistance: 3; rolloffFactor: 3`
       : soundSrc
   );
   if (autoPlay) {
