@@ -1,66 +1,65 @@
-function fetchJSONData() {
-  fetch("./en_wiki_Galaxy_with_audio.json")
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-      }
-      return res.json();
-    })
-    .then((data) => loadAudio(data))
-    // .then((data) => drawLayout(data))
-    .catch((error) => console.error("Unable to fetch data:", error));
-}
-
-fetchJSONData();
-
-const sceneEl = document.querySelector("a-scene");
-const assetEl = document.querySelector("a-assets");
+// Global variables - keep them here but don't assign DOM elements yet
+let sceneEl, assetEl, sounds;
 const y = 1.6;
-const d1 = 8; // header 2
-const d2 = 8; // header2 to header3
-const dp = 6; // header to p
-let x0 = 0;
-let z = 0;
-let z0 = 0;
-let src;
-let sounds;
-let deg;
+const d1 = 8;
+const d2 = 8;
+const dp = 6;
+let x0 = 0,
+  z = 0,
+  z0 = 0;
 let minX = 0,
   maxX = 0,
   minZ = 0;
-const margin = 2; //get boundaries
+const margin = 2;
 const proxi = 2;
 let elCount = 0;
 let checkCollide = false;
 let collide = true;
 
-//////////////// LOAD AUDIO ////////////////
-function loadAudio(data) {
-  createAudio(data.Title.audio_path.replace("mp3s\\", "").replace(".mp3", ""));
-  createAudio(
-    data.Introduction.audio_path.replace("mp3s\\", "").replace(".mp3", "")
-  );
+window.addEventListener("DOMContentLoaded", (event) => {
+  // NOW we can find the elements
+  sceneEl = document.querySelector("a-scene");
+  assetEl = document.querySelector("a-assets");
+  fetchJSONData();
+});
 
-  iterateAudio(data.Sections, "Sections_");
-
-  drawLayout(data);
+function fetchJSONData() {
+  fetch("./en_wiki_Galaxy_with_audio.json")
+    .then((res) => {
+      if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+      return res.json();
+    })
+    .then((data) => loadAudio(data))
+    .catch((error) => console.error("Unable to fetch data:", error));
 }
 
-// Recursively iterates through sections and subsections to load audio
+//////////////// LOAD AUDIO ////////////////
+function loadAudio(data) {
+  // Create all audio elements
+  createAudio(data.Title.audio_path.replace("mp3s\\", "").replace(".mp3", ""));
+  createAudio(
+    data.Introduction.audio_path.replace("mp3s\\", "").replace(".mp3", ""),
+  );
+  iterateAudio(data.Sections, "Sections_");
+
+  // Give the browser a tiny moment to "see" the new audio tags before building the VR spheres
+  setTimeout(() => {
+    drawLayout(data);
+  }, 100);
+}
+
 function iterateAudio(section, prename) {
   for (const key in section) {
     const name = prename + key.replace(":", "").replaceAll(" ", "_");
     createAudio(
-      section[key].audio_path.replace("mp3s\\", "").replace(".mp3", "")
+      section[key].audio_path.replace("mp3s\\", "").replace(".mp3", ""),
     );
 
     if (section[key].P && section[key].P.audio_path !== "") {
       createAudio(
-        section[key].P.audio_path.replace("mp3s\\", "").replace(".mp3", "")
+        section[key].P.audio_path.replace("mp3s\\", "").replace(".mp3", ""),
       );
     }
-
-    // Recursively process subsections if they exist
     if (section[key].Subsections) {
       iterateAudio(section[key].Subsections, name + "_Subsections_");
     }
@@ -68,24 +67,19 @@ function iterateAudio(section, prename) {
 }
 
 function createAudio(name) {
+  if (!name) return;
   const audioEl = document.createElement("audio");
-  let url = `https://cdn.glitch.global/ae883fef-97f3-4a7f-9e84-8ff882dc9acf/${
-    name + "_R2"
-  }.wav`;
-
-  // let url = `https://cdn.glitch.global/ae883fef-97f3-4a7f-9e84-8ff882dc9acf/${name}.mp3`; // without reverb
+  // Use backticks for template literal
+  let url = `./audio/${name}.mp3`;
 
   audioEl.setAttribute("id", name);
   audioEl.setAttribute("preload", "auto");
   audioEl.setAttribute("src", url);
-  // console.log(url);
   assetEl.appendChild(audioEl);
 }
 
 //////////////// DRAW LAYOUT ///////////////////
-// Handles the creation of visual and interactive elements in the scene
 function drawLayout(data) {
-  // Create title element (pink)
   z = -d1;
   const titleEl = createElement(
     sceneEl,
@@ -96,10 +90,8 @@ function drawLayout(data) {
     "title",
     "title",
     data.Title.audio_path.replace("mp3s\\", "").replace(".mp3", ""),
-    true
+    true,
   );
-
-  // Create introduction element (pink)
   const introEl = createElement(
     titleEl,
     x0,
@@ -109,20 +101,17 @@ function drawLayout(data) {
     "intro",
     "intro",
     data.Introduction.audio_path.replace("mp3s\\", "").replace(".mp3", ""),
-    true
+    true,
   );
 
-  // Recursively create sections and subsections
   iterateSection(x0, 0, z, d1, data.Sections, introEl, "Sections_", 0);
 
-  // Add sound collision detection and boundary
   sounds = document.querySelectorAll("a-sphere");
-  // document.querySelector("[camera]").setAttribute("check-collide", "");
   document.querySelector("[camera]").setAttribute("play-proxi", "");
 
+  // Spacebar control
   document.addEventListener("keyup", (event) => {
     if (event.code === "Space") {
-      // console.log(event.code);
       checkCollide = false;
       checkAudio(sounds);
     }
@@ -132,9 +121,7 @@ function drawLayout(data) {
     collide = true;
   });
 
-  // console.log(elCount);
-
-  // Create boundary sound object (ivory color)
+  // Boundary sound
   createElement(
     sceneEl,
     minX - margin,
@@ -144,9 +131,8 @@ function drawLayout(data) {
     "sound-cues",
     "bound",
     "bound-cue",
-    false
+    false,
   );
-
   document.querySelector("[camera]").setAttribute("hit-bounds", "");
 }
 
@@ -175,7 +161,7 @@ function iterateSection(x, y, z, d, section, parentEl, prename, angle) {
       "header",
       `${key}${i}`,
       headerName,
-      true
+      true,
     );
 
     // If paragraph exists, create it (yellow)
@@ -191,7 +177,7 @@ function iterateSection(x, y, z, d, section, parentEl, prename, angle) {
         "p",
         `${key}${i}_p`,
         section[key].P.audio_path.replace("mp3s\\", "").replace(".mp3", ""),
-        true
+        true,
       );
     }
 
@@ -205,7 +191,7 @@ function iterateSection(x, y, z, d, section, parentEl, prename, angle) {
         section[key].Subsections,
         headerEl,
         name + "_Subsections_",
-        0
+        0,
       );
     }
   });
@@ -221,11 +207,9 @@ function createElement(
   className,
   id,
   soundId,
-  autoPlay
+  autoPlay,
 ) {
   const sphereEl = document.createElement("a-sphere");
-
-  // Set attributes for the sphere element
   sphereEl.setAttribute("color", color);
   sphereEl.setAttribute("shader", "flat");
   sphereEl.setAttribute("radius", "0.5");
@@ -233,25 +217,23 @@ function createElement(
   sphereEl.setAttribute("class", className);
   sphereEl.setAttribute("id", id);
 
-  // Set sound attributes
+  // Added poolSize: 10 to fix the "All sounds are playing" warning
   const soundSrc = `src:#${soundId}`;
   sphereEl.setAttribute(
     "sound",
     autoPlay
-      ? `${soundSrc}; autoplay: false; loop: false; distanceModel: exponential; refDistance: 3; rolloffFactor: 3`
-      : soundSrc
+      ? `${soundSrc}; autoplay: false; loop: false; distanceModel: exponential; refDistance: 3; rolloffFactor: 3; poolSize: 10`
+      : `${soundSrc}; poolSize: 10`,
   );
+
   if (autoPlay) {
     sphereEl.setAttribute("world-pos", "");
     sphereEl.setAttribute("collide", "");
   }
 
-  // Append the created element to its parent
   parentEl.appendChild(sphereEl);
-
   elCount++;
-
-  return document.getElementById(id); // Return the created element
+  return sphereEl;
 }
 
 //////////////// PLAY AUDIO ////////////////
