@@ -482,3 +482,19 @@ AFRAME.registerComponent("play-proxi", {
 function distance(x1, z1, x2, z2) {
   return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(z1 - z2, 2));
 }
+
+// This forces the AudioContext to start on the first click
+window.addEventListener(
+  "click",
+  () => {
+    const scene = document.querySelector("a-scene");
+    if (scene && scene.audioListener) {
+      if (scene.audioListener.context.state === "suspended") {
+        scene.audioListener.context.resume().then(() => {
+          console.log("AudioContext resumed successfully");
+        });
+      }
+    }
+  },
+  { once: true },
+);
