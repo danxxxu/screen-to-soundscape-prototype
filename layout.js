@@ -104,6 +104,19 @@ function drawLayout(data) {
     true,
   );
 
+  // Boundary sound
+  createElement(
+    sceneEl,
+    minX - margin,
+    y,
+    z0 + margin,
+    "#F0FFFF",
+    "sound-cues",
+    "bound",
+    "bound-cue",
+    false,
+  );
+
   iterateSection(x0, 0, z, d1, data.Sections, introEl, "Sections_", 0);
 
   sounds = document.querySelectorAll("a-sphere");
@@ -121,18 +134,6 @@ function drawLayout(data) {
     collide = true;
   });
 
-  // Boundary sound
-  createElement(
-    sceneEl,
-    minX - margin,
-    y,
-    z0 + margin,
-    "#F0FFFF",
-    "sound-cues",
-    "bound",
-    "bound-cue",
-    false,
-  );
   document.querySelector("[camera]").setAttribute("hit-bounds", "");
 }
 
@@ -222,8 +223,8 @@ function createElement(
   sphereEl.setAttribute(
     "sound",
     autoPlay
-      ? `${soundSrc}; autoplay: false; loop: false; distanceModel: exponential; refDistance: 3; rolloffFactor: 3; poolSize: 10`
-      : `${soundSrc}; poolSize: 10`,
+      ? `${soundSrc}; autoplay: false; loop: false; distanceModel: exponential; refDistance: 3; rolloffFactor: 3; poolSize: 1`
+      : `${soundSrc}; poolSize: 1`,
   );
 
   if (autoPlay) {
