@@ -1,0 +1,8 @@
+node_modules/
+.node-gyp/
+.env
+pnpm-debug.log
+.glitch-assets
+.glitchdotcom.json
+package-lock.json
+package.json
